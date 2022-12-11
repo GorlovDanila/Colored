@@ -1,0 +1,51 @@
+# LINUX
+*~
+
+# WINDOWS
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+**/$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# NETBEANS and other IDEs
+**/nbproject/
+**/build/
+**/dist/
+.idea/
+out/
+build.xml
+manifest.mf
+*.iml
+
+# JAVA
+
+*.class
+
+# Mobile Tools for Java (J2ME)
+**/.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# Maven
+target/
