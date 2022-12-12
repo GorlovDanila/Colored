@@ -43,6 +43,10 @@ public class MessagePacket {
         return packet;
     }
 
+    public static boolean compareEOP(byte[] array, int last) {
+        return array[last - 1] == FOOTER_1 && array[last] == FOOTER_2;
+    }
+
     public static MessagePacket parse(byte[] data) {
         if (data[0] != HEADER_1 || data[1] != HEADER_2 || data[2] != HEADER_3
                 || data[data.length - 1] != FOOTER_2 && data[data.length - 2] != FOOTER_1) {
