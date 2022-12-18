@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="gui.controller.DrawerController"
+            id="BorderPane">
+
+    <top>
+        <GridPane hgap="20" alignment="TOP_CENTER">
+
+            <padding>
+                <Insets top="20" right="0" bottom="0" left="0"/>
+            </padding>
+
+            <ColorPicker fx:id="cp" onAction="#cpAction" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <value>
+                    <Color blue="0.0" green="0.0" red="0.0"/>
+                </value>
+            </ColorPicker>
+
+            <Slider fx:id="slider" min="1.0" max="100.0" showTickLabels="true" showTickMarks="true"
+                    GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label fx:id="sliderLabel" text="1.0" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+
+        </GridPane>
+    </top>
+
+    <bottom>
+        <Label fx:id="wordLabel" text="Слово" BorderPane.alignment="TOP_CENTER"/>
+    </bottom>
+
+    <left>
+        <GridPane alignment="TOP_CENTER" vgap="20">
+            <Label text="Рисует: "
+                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+
+            <Label text="Nickname" fx:id="drawerLabel"
+                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="00:00" fx:id="timerLabel"
+                   GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+
+            <Label text="0000" fx:id="lobbyIdLabel"
+                   GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        </GridPane>
+    </left>
+
+    <center>
+        <Canvas fx:id="canvas" height="480.0" width="720.0"/>
+    </center>
+
+</BorderPane>
