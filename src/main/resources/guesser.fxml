@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="gui.controller.GuesserController"
+            id="BorderPane">
+
+    <bottom>
+        <GridPane alignment="TOP_CENTER" hgap="20">
+            <Label text="Угадать слово: "
+                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+
+            <TextField id="wordInput" fx:id="wordInput"
+                       GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Button id="wordBtn" text="Ok"
+                    onAction="#wordBtnAction" fx:id="wordBtn"
+                    GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+        </GridPane>
+    </bottom>
+
+    <left>
+        <GridPane alignment="TOP_CENTER" vgap="20">
+            <Label text="Рисует: "
+                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+
+            <Label text="Nickname" fx:id="drawerLabel"
+                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="00:00" fx:id="timerLabel"
+                   GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+
+            <Label text="0000" fx:id="lobbyIdLabel"
+                   GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        </GridPane>
+    </left>
+
+    <center>
+        <Canvas fx:id="canvas" height="480.0" width="720.0"/>
+    </center>
+
+</BorderPane>

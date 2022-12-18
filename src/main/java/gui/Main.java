@@ -1,10 +1,10 @@
+package gui;
+
+import gui.scene.AuthScene;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import gui.*;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Main extends Application {
     public int WINDOW_H = 600;
