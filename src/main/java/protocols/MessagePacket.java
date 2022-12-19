@@ -24,6 +24,11 @@ public class MessagePacket {
     public static final byte SUBTYPE_HANDSHAKE = 2;
     public static final byte SUBTYPE_GOODBYE = 3;
     public static final byte SUBTYPE_CORRECT_WORD = 7;
+    public static final byte SUBTYPE_START_GAME = 9;
+    public static final byte SUBTYPE_END_GAME = 10;
+    public static final byte SUBTYPE_START_ROUND = 11;
+    public static final byte SUBTYPE_END_ROUND = 12;
+    public static final byte SUBTYPE_NEXT_ROUND = 13;
     public static final byte TYPE_BOARD = 4;
     public static final byte SUBTYPE_JSON = 5;
     public static final byte SUBTYPE_DEFAULT = 6;
@@ -54,29 +59,31 @@ public class MessagePacket {
         }
         var type = data[3];
         var subType = data[4];
+        MessagePacket packet = MessagePacket.create(type, subType);
         switch (type) {
             case TYPE_META:
                 switch (subType) {
                     case SUBTYPE_HANDSHAKE:
-                        return HandshakeHandler.parse(data);
+                        return HandshakeHandler.parse(data, packet);
                     case SUBTYPE_GOODBYE:
-                        return GoodbyeHandler.parse(data);
+                        return GoodbyeHandler.parse(data, packet);
                     case SUBTYPE_CORRECT_WORD:
-                        return WordHandler.parse(data);
+                        return WordHandler.parse(data, packet);
+                    default:
+                        return StartGameHandler.parse(data, packet);
                 }
-                break;
             case TYPE_BOARD:
                 switch (subType) {
                     case SUBTYPE_JSON:
-                        return JSONHandler.parse(data);
+                        return JSONHandler.parse(data, packet);
                     case SUBTYPE_DEFAULT:
-                        return DefaultHandler.parse(data);
+                        return DefaultHandler.parse(data, packet);
                 }
                 break;
             case TYPE_MESSAGE:
                 switch (subType) {
                     case SUBTYPE_DEFAULT:
-                        return DefaultHandler.parse(data);
+                        return DefaultHandler.parse(data, packet);
                 }
                 break;
         }
@@ -87,6 +94,7 @@ public class MessagePacket {
         try (ByteArrayOutputStream writer = new ByteArrayOutputStream()) {
             writer.write(new byte[]{HEADER_1, HEADER_2, HEADER_3});
             writer.write(packetType);
+            writer.write(packetSubtype);
             switch (packetType) {
                 case TYPE_META:
                     switch (packetSubtype) {
@@ -98,6 +106,8 @@ public class MessagePacket {
                             break;
                         case SUBTYPE_CORRECT_WORD:
                             WordHandler.toByteArray(this, writer);
+                        default:
+                            break;
                     }
                     break;
                 case TYPE_BOARD:

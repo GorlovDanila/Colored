@@ -15,7 +15,6 @@ public class JSONHandler {
     static Gson gson = new Gson();
 
     public static void toByteArray(MessagePacket packet, ByteArrayOutputStream bos) {
-        bos.write(MessagePacket.SUBTYPE_JSON);
         try {
             for (PacketField field: packet.getFields()) {
                 bos.write(new byte[] {field.getFieldId(), field.getFieldSize()});
@@ -26,8 +25,7 @@ public class JSONHandler {
         }
     }
 
-    public static MessagePacket parse(byte[] data) {
-        MessagePacket packet = MessagePacket.create(MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_JSON);
+    public static MessagePacket parse(byte[] data, MessagePacket packet) {
         int offset = 5;
         while (true) {
             if (data.length - 2 <= offset) {

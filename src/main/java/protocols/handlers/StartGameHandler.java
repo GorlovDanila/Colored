@@ -2,25 +2,10 @@ package protocols.handlers;
 
 import protocols.MessagePacket;
 import protocols.PacketField;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 import static protocols.MessagePacket.FOOTER_1;
 import static protocols.MessagePacket.FOOTER_2;
 
-public class WordHandler {
-    public static void toByteArray(MessagePacket packet, ByteArrayOutputStream writer) {
-        try {
-            for (PacketField field: packet.getFields()) {
-                writer.write(new byte[] {field.getFieldId(), field.getFieldSize()});
-                writer.write(field.getContent());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+public class StartGameHandler {
     public static MessagePacket parse(byte[] data, MessagePacket packet) {
         int offset = 5;
         while (true) {

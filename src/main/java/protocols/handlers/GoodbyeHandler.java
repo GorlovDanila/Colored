@@ -11,7 +11,6 @@ import static protocols.MessagePacket.FOOTER_2;
 
 public class GoodbyeHandler {
     public static void toByteArray(MessagePacket packet, ByteArrayOutputStream writer) {
-        writer.write(MessagePacket.SUBTYPE_GOODBYE);
         try {
             for (PacketField field: packet.getFields()) {
                 writer.write(new byte[] {field.getFieldId(), field.getFieldSize()});
@@ -22,9 +21,7 @@ public class GoodbyeHandler {
         }
     }
 
-    public static MessagePacket parse(byte[] data) {
-
-        MessagePacket packet = MessagePacket.create(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_GOODBYE);
+    public static MessagePacket parse(byte[] data, MessagePacket packet) {
         int offset = 5;
         while (true) {
             if (data.length - 2 <= offset) {
