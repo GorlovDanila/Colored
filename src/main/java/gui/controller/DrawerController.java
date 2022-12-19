@@ -66,5 +66,6 @@ public class DrawerController {
             gc.lineTo(e.getSceneX(), e.getSceneY());
             gc.stroke();
         });
+
     }
 }

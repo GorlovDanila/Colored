@@ -1,10 +1,7 @@
 package server;
 
-import client.PlayerClient;
 import core.Player;
 import core.Room;
-import gui.controller.WaitingCreatorController;
-import gui.controller.WaitingJoinerController;
 import gui.scene.GuesserScene;
 import javafx.stage.Stage;
 
@@ -43,29 +40,12 @@ public class Server {
                 System.out.println(players);
                 room.setPlayers(players);
                 players = new ArrayList<>();
-                if(WaitingCreatorController.gameStartFlag) {
+                //В ЗАВИСИМОСТИ ОТ ТИПА ПАКЕТА НАЧИНАЕМ
+//                if(WaitingCreatorController.gameStartFlag) {
                     isGameActive = true;
                     room.run();
-                }
+//                }
             }
-//            while (true) {
-//                Common common = new Common(server);
-//                new Thread(() -> {
-//                    Object request = common.readObject(1);
-//                    System.out.println("Request: " + request.toString());
-//                    String response = (int) (Math.random() * 30 - 10) + "";
-//                    try {
-//                        Thread.sleep(4000);
-//                    } catch (InterruptedException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                    common.writeObject(response, 4, 5, 2);
-//                    System.out.println("Response: " + response);
-//                    try { common.close();} catch (IOException e) {}
-//                }).start();
-//                server.accept();
-//            }
-//            }
         } catch (IOException e) {
             throw new RuntimeException();
         }

@@ -8,7 +8,6 @@ import java.util.List;
 public class Room implements Runnable {
     private final int id;
     private static List<Player> players;
-
     private int playersCount;
 
 //    public static boolean isGameActive = false;
@@ -29,12 +28,14 @@ public class Room implements Runnable {
 
     @Override
     public void run() {
+        //ЛЮДИ ОБЩАЮТСЯ ЧЕРЕЗ СЕРВАК
 
 //        for (int i = 0; i < playersCount; i++) {
 //            //players.get(i) = new Player(server);
 //            players.add(new Player(server));
 //            players.get(i).writeObject("Ждём других игроков", 4, 5, 2);
 //        }
+
         System.out.println(WaitingCreatorController.gameStartFlag);
 //        if (WaitingCreatorController.gameStartFlag) {
             if (playersCount == players.size()) {
