@@ -12,7 +12,6 @@ import static protocols.MessagePacket.FOOTER_2;
 
 public class DefaultHandler {
     public static void toByteArray(MessagePacket packet, ByteArrayOutputStream writer) {
-        writer.write(MessagePacket.SUBTYPE_DEFAULT);
         try {
             for (PacketField field: packet.getFields()) {
                 writer.write(new byte[] {field.getFieldId(), field.getFieldSize()});
@@ -23,9 +22,7 @@ public class DefaultHandler {
         }
     }
 
-    public static MessagePacket parse(byte[] data) {
-
-        MessagePacket packet = MessagePacket.create(MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT);
+    public static MessagePacket parse(byte[] data, MessagePacket packet) {
         int offset = 5;
         while (true) {
             if (data.length - 2 <= offset) {

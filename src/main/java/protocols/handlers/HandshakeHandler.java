@@ -2,7 +2,6 @@ package protocols.handlers;
 
 import protocols.MessagePacket;
 import protocols.PacketField;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -10,7 +9,6 @@ import java.io.ObjectOutputStream;
 public class HandshakeHandler {
 
     public static void toByteArray(MessagePacket packet, ByteArrayOutputStream bos) {
-        bos.write(MessagePacket.SUBTYPE_HANDSHAKE);
         String message = "";
         byte id = 0;
         if (packet.getFields().size() == 0) {
@@ -46,10 +44,8 @@ public class HandshakeHandler {
         }
     }
 
-    public static MessagePacket parse(byte[] data) {
-        byte subType = data[4];
+    public static MessagePacket parse(byte[] data, MessagePacket packet) {
         int offset = 5;
-        MessagePacket packet = MessagePacket.create((byte) 1, subType);
         while (true) {
             if (data.length - 2 <= offset) {
                 if (packet.getFields().size() == 2) {
@@ -61,7 +57,6 @@ public class HandshakeHandler {
                 }
                 return packet;
             }
-
 
             byte fieldId = data[offset];
             byte fieldSize = data[offset + 1];
