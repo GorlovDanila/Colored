@@ -1,19 +1,32 @@
-package core;
+package client;
 
 import protocols.MessagePacket;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Player {
-    private final InputStream reader;
-    private final OutputStream writer;
+public class PlayerClient {
+
     private Socket clientSocket;
+    private String serverIp;
+    private InputStream reader;
+    private OutputStream writer;
+
+    private PlayerThread gameThread;
     private String role;
     private String name;
 
+    private boolean lobbyCreatorFlag = false;
+
     private String idOfRoom;
+
+    public boolean isLobbyCreatorFlag() {
+        return lobbyCreatorFlag;
+    }
+
+    public void setLobbyCreatorFlag(boolean lobbyCreatorFlag) {
+        this.lobbyCreatorFlag = lobbyCreatorFlag;
+    }
 
     public String getIdOfRoom() {
         return idOfRoom;
@@ -21,6 +34,19 @@ public class Player {
 
     public void setIdOfRoom(String idOfRoom) {
         this.idOfRoom = idOfRoom;
+    }
+
+    public PlayerClient(String serverIp) {
+        this.serverIp = serverIp;
+    }
+
+    public void start() throws IOException {
+        clientSocket = new Socket(serverIp, 8000);
+        this.reader = createReader();
+        this.writer = createWriter();
+
+        gameThread = new PlayerThread(reader, writer, this);
+        new Thread(gameThread).start();
     }
 
     public String getRole() {
@@ -38,29 +64,6 @@ public class Player {
     public void setName(String name) {
         this.name = name;
     }
-
-    @Override
-    public String toString() {
-        return "Player{" +
-                "reader=" + reader +
-                ", writer=" + writer +
-                ", clientSocket=" + clientSocket +
-                ", role='" + role + '\'' +
-                ", name='" + name + '\'' +
-                ", idOfRoom='" + idOfRoom + '\'' +
-                '}';
-    }
-
-    public Player(ServerSocket serverSocket) throws IOException {
-        clientSocket = serverSocket.accept();
-        System.out.print("Connection accepted.\n");
-        this.reader = createReader();
-        this.writer = createWriter();
-        role = "";
-        name = "";
-        idOfRoom = "";
-    }
-
     private InputStream createReader() throws IOException {
         return clientSocket.getInputStream();
     }

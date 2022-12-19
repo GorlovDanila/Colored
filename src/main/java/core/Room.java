@@ -1,16 +1,19 @@
 package core;
 
+import gui.controller.WaitingCreatorController;
 import protocols.MessagePacket;
 
 import java.util.List;
 
 public class Room implements Runnable {
     private final int id;
-    private List<Player> players;
+    private static List<Player> players;
 
     private int playersCount;
 
-    public List<Player> getPlayers() {
+//    public static boolean isGameActive = false;
+
+    public static List<Player> getPlayers() {
         return players;
     }
 
@@ -32,57 +35,60 @@ public class Room implements Runnable {
 //            players.add(new Player(server));
 //            players.get(i).writeObject("Ждём других игроков", 4, 5, 2);
 //        }
+        System.out.println(WaitingCreatorController.gameStartFlag);
+//        if (WaitingCreatorController.gameStartFlag) {
+            if (playersCount == players.size()) {
 
-        if(playersCount == players.size()) {
-
-            System.out.println("Game started...\n");
-            for (Player player : players) {
-                player.writeObject("Game started...", 4, 5, 2);
-            }
-            GameLogic logic = new GameLogic();
-            logic.setCorrectWord(currentWord());
-
-            int idOfDrawer = setRoles(players, 0);
-
-            for (Player player : players) {
-                if (player.getRole().equals("Drawer")) {
-                    player.writeObject("Вы рисующий", MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 2);
-                    player.writeObject(logic.getCorrectWord(), 4, 5, 3);
-                } else {
-                    player.writeObject("Вы угадывающий", 4, 5, 2);
+                System.out.println("Game started...\n");
+                for (Player player : players) {
+                    player.writeObject("Game started...", 4, 5, 2);
                 }
-            }
+                GameLogic logic = new GameLogic();
+//                isGameActive = true;
+                logic.setCorrectWord(currentWord());
 
-            String board = "";
-            for (Player player : players) {
-                if (player.getRole().equals("Drawer")) {
-                    board = (String) player.readObject(1);
-                }
-            }
+                int idOfDrawer = setRoles(players, 0);
 
-            for (Player player : players) {
-                if (!player.getRole().equals("Drawer")) {
-                    player.writeObject(board, 4, 5, 2);
-                }
-            }
-
-            int countOfGuessed = 0;
-            //читаем ответ игрока
-            for (Player player : players) {
-                if (!player.getRole().equals("Drawer")) {
-                    String word = (String) player.readObject(1);
-                    if (logic.equalsWords(word)) {
-                        countOfGuessed++;
-                        player.writeObject("Вы угадали", 4, 5, 2);
+                for (Player player : players) {
+                    if (player.getRole().equals("Drawer")) {
+                        player.writeObject("Вы рисующий", MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 2);
+                        player.writeObject(logic.getCorrectWord(), 4, 5, 3);
                     } else {
-                        player.writeObject("Вы не угадали", 4, 5, 2);
+                        player.writeObject("Вы угадывающий", 4, 5, 2);
                     }
                 }
-            }
 
-            players.get(idOfDrawer).writeObject("Угадало " + countOfGuessed + " игроков", 4, 5, 2);
+                String board = "";
+                for (Player player : players) {
+                    if (player.getRole().equals("Drawer")) {
+                        board = (String) player.readObject(1);
+                    }
+                }
+
+                for (Player player : players) {
+                    if (!player.getRole().equals("Drawer")) {
+                        player.writeObject(board, 4, 5, 2);
+                    }
+                }
+
+                int countOfGuessed = 0;
+                //читаем ответ игрока
+                for (Player player : players) {
+                    if (!player.getRole().equals("Drawer")) {
+                        String word = (String) player.readObject(1);
+                        if (logic.equalsWords(word)) {
+                            countOfGuessed++;
+                            player.writeObject("Вы угадали", 4, 5, 2);
+                        } else {
+                            player.writeObject("Вы не угадали", 4, 5, 2);
+                        }
+                    }
+                }
+
+                players.get(idOfDrawer).writeObject("Угадало " + countOfGuessed + " игроков", 4, 5, 2);
+            }
         }
-    }
+//    }
 
     private static int setRoles(List<Player> players, int id) {
 

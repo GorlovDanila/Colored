@@ -1,7 +1,12 @@
 package server;
 
+import client.PlayerClient;
 import core.Player;
 import core.Room;
+import gui.controller.WaitingCreatorController;
+import gui.controller.WaitingJoinerController;
+import gui.scene.GuesserScene;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -9,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
+    public static List<String> names = new ArrayList<>();
+    public static boolean isGameActive = false;
     public static void main(String[] args) {
 
         int countClients = 2;
@@ -21,71 +28,26 @@ public class Server {
 
                 Room room = new Room(0, players, 2);
                 rooms.add(room);
-
+//                PlayerClient client = new PlayerClient("127.0.0.1");
+//                client.start();
+//                PlayerClient client1 = new PlayerClient("127.0.0.1");
                 for (int i = 0; i < 2; i++) {
                     //players.get(i) = new Player(server);
                     players.add(new Player(server));
+                    players.get(i).setName((String) players.get(i).readObject(1));
+                    players.get(i).setIdOfRoom((String) players.get(i).readObject(2));
+//                    players.get(i).setName(names.get(i));
                     players.get(i).writeObject("Ждём других игроков", 4, 5, 2);
+//                    client1.start();
                 }
+                System.out.println(players);
                 room.setPlayers(players);
                 players = new ArrayList<>();
-                room.run();
+                if(WaitingCreatorController.gameStartFlag) {
+                    isGameActive = true;
+                    room.run();
+                }
             }
-
-//            System.out.println("Game started...\n");
-//            for (int i = 0; i < 2; i++) {
-//                players.get(i).writeObject("Game started...", 4, 5, 2);
-//            }
-
-            //ROOOOOOOOOOOOOOOOOOOOOOM
-//            Room room = new Room(0, players);
-//            new Thread(() -> {
-//
-//            }).start();
-
-//            GameLogic logic = new GameLogic();
-//            logic.setCorrectWord(currentWord());
-//
-//            int idOfDrawer = setRoles(players, 0);
-
-//            for (Player player : players) {
-//                if (player.getRole().equals("Drawer")) {
-//                    player.writeObject("Вы рисующий", MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 2);
-//                    player.writeObject(logic.getCorrectWord(), 4, 5, 3);
-//                } else {
-//                    player.writeObject("Вы угадывающий", 4, 5, 2);
-//                }
-//            }
-
-//            String board = "";
-//            for (Player player : players) {
-//                if (player.getRole().equals("Drawer")) {
-//                    board = (String) player.readObject(1);
-//                }
-//            }
-//
-//            for (Player player : players) {
-//                if (!player.getRole().equals("Drawer")) {
-//                    player.writeObject(board, 4, 5, 2);
-//                }
-//            }
-//
-//            int countOfGuessed = 0;
-//            //читаем ответ игрока
-//            for (Player player : players) {
-//                if (!player.getRole().equals("Drawer")) {
-//                    String word = (String) player.readObject(1);
-//                    if (logic.equalsWords(word)) {
-//                        countOfGuessed++;
-//                        player.writeObject("Вы угадали", 4, 5, 2);
-//                    } else {
-//                        player.writeObject("Вы не угадали", 4, 5, 2);
-//                    }
-//                }
-//            }
-//
-//            players.get(idOfDrawer).writeObject("Угадало " + countOfGuessed + " игроков", 4, 5, 2);
-
 //            while (true) {
 //                Common common = new Common(server);
 //                new Thread(() -> {
@@ -107,6 +69,10 @@ public class Server {
         } catch (IOException e) {
             throw new RuntimeException();
         }
+    }
+
+    public static void startGame(Stage stage) {
+        GuesserScene.display(stage, 0, "", 1080, 600);
     }
 }
 

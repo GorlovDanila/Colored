@@ -1,8 +1,10 @@
 package gui;
 
+import client.Client;
 import gui.scene.AuthScene;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import server.Server;
 
 import java.io.IOException;
 
@@ -16,6 +18,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+
         try {
             stage.setTitle("Colored!");
             setUserAgentStylesheet(STYLESHEET_MODENA);
