@@ -62,7 +62,7 @@ public class DefaultHandler {
             field.setFieldSize((byte) data.length);
             field.setContent(data);
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
         return field;
     }

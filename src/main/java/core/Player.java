@@ -1,5 +1,6 @@
 package core;
 
+import javafx.stage.Stage;
 import protocols.MessagePacket;
 
 import java.io.*;
@@ -12,6 +13,16 @@ public class Player {
     private Socket clientSocket;
     private String role;
     private String name;
+
+    private Stage stage;
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     private String idOfRoom;
 
@@ -59,6 +70,7 @@ public class Player {
         role = "";
         name = "";
         idOfRoom = "";
+        stage = null;
     }
 
     private InputStream createReader() throws IOException {

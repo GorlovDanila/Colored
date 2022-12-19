@@ -1,5 +1,6 @@
 package client;
 
+import javafx.stage.Stage;
 import protocols.MessagePacket;
 
 import java.io.*;
@@ -15,6 +16,8 @@ public class PlayerClient {
     private PlayerThread gameThread;
     private String role;
     private String name;
+
+    private Stage stage;
 
     private boolean lobbyCreatorFlag = false;
 
@@ -40,13 +43,21 @@ public class PlayerClient {
         this.serverIp = serverIp;
     }
 
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
     public void start() throws IOException {
         clientSocket = new Socket(serverIp, 8000);
         this.reader = createReader();
         this.writer = createWriter();
 
         gameThread = new PlayerThread(reader, writer, this);
-        new Thread(gameThread).start();
+        gameThread.start();
     }
 
     public String getRole() {

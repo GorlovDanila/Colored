@@ -21,17 +21,22 @@ public class WaitingCreatorController {
 
     @FXML
     public void startAction(ActionEvent actionEvent) {
-        Stage stage = (Stage) connectedLabel.getScene().getWindow();
-        if (AuthController.client.getRole().equals("Drawer")) {
-            Server.startGame(stage);
-            DrawerScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
-                    1080, 600);
-            gameStartFlag = true;
-        } else {
-            Server.startGame(stage);
-            GuesserScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
-                    1080, 600);
-            gameStartFlag = true;
-        }
+
+//        AuthController.client.writeObject();
+        // TODO: отправить комнате сообщение о том, что клиентам пора новые сцены создавать
+
+//        Stage stage = (Stage) connectedLabel.getScene().getWindow();
+//        if (AuthController.client.getRole() != null) {
+//            if (AuthController.client.getRole().equals("Drawer")) {
+//
+////                Server.startGame(stage);
+//                DrawerScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
+//                        1080, 600);
+//            } else {
+////                Server.startGame(stage);
+//                GuesserScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
+//                        1080, 600);
+//            }
+//        }
     }
 }

@@ -1,6 +1,7 @@
 package server;
 
 import client.PlayerClient;
+import com.google.gson.Gson;
 import core.Player;
 import core.Room;
 import gui.controller.WaitingCreatorController;
@@ -16,6 +17,8 @@ import java.util.List;
 public class Server {
     public static List<String> names = new ArrayList<>();
     public static boolean isGameActive = false;
+
+    static Gson gson = new Gson();
     public static void main(String[] args) {
 
         int countClients = 2;
@@ -36,6 +39,7 @@ public class Server {
                     players.add(new Player(server));
                     players.get(i).setName((String) players.get(i).readObject(1));
                     players.get(i).setIdOfRoom((String) players.get(i).readObject(2));
+                    players.get(i).setStage(gson.fromJson((String) players.get(i).readObject(3), Stage.class));
 //                    players.get(i).setName(names.get(i));
                     players.get(i).writeObject("Ждём других игроков", 4, 5, 2);
 //                    client1.start();

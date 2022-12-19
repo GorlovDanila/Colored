@@ -4,7 +4,7 @@ import protocols.MessagePacket;
 
 import java.io.*;
 
-public class PlayerThread implements Runnable {
+public class PlayerThread extends Thread {
     private final InputStream reader;
     private final OutputStream writer;
     private final PlayerClient client;
@@ -76,6 +76,7 @@ public class PlayerThread implements Runnable {
         System.out.println("Connected to server");
         writeObject(client.getName(), 4, 5, 1);
         writeObject(client.getIdOfRoom(), 4, 5, 2);
+        writeObject(client.getStage(),4, MessagePacket.SUBTYPE_JSON, 3);
         Object response = readObject(2);
         System.out.println("Response: " + response.toString());
         response = readObject(2);
@@ -86,6 +87,7 @@ public class PlayerThread implements Runnable {
         System.out.println(role);
 
         if (role.equals("Вы рисующий")) {
+            System.out.println("DAFSgedgqeewrtq3t4yghjsr4wtrhytre3wthytr4tyhyr43tdhgre4");
             client.setRole("Drawer");
             //загадывается слово
             response = readObject(3);

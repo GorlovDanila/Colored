@@ -1,10 +1,8 @@
 package gui;
 
-import client.Client;
 import gui.scene.AuthScene;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import server.Server;
 
 import java.io.IOException;
 

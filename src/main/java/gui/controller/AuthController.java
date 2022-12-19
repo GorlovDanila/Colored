@@ -28,8 +28,10 @@ public class AuthController {
         if (isInt(joinLobbyInput)) {
             Stage stage = (Stage) joinLobbyInput.getScene().getWindow();
             client = new PlayerClient("127.0.0.1");
+            client.setRole("Drawer");
             client.setName(nameInput.getText());
             client.setIdOfRoom(joinLobbyInput.getText());
+            client.setStage(stage);
             client.start();
             try {
                 WaitingJoinerScene.display(stage, 1080, 600);
@@ -46,7 +48,9 @@ public class AuthController {
             Server.names.add(nameInput.getText());
             client = new PlayerClient("127.0.0.1");
             client.setName(nameInput.getText());
+            client.setRole("Guesser");
             client.setIdOfRoom(newLobbyInput.getText());
+            client.setStage(stage);
             client.setLobbyCreatorFlag(true);
             client.start();
             try {

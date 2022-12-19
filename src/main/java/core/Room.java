@@ -111,6 +111,11 @@ public class Room implements Runnable {
         return idOfDrawer;
     }
 
+
+    public static void redrawWindow() {
+
+    }
+
     private static String currentWord() {
         WordsRepository wordsRepository = new WordsRepository();
         List<String> words = wordsRepository.getWords();
