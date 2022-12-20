@@ -12,7 +12,8 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="gui.controller.GuesserController"
-            id="BorderPane">
+            id="BorderPane"
+            fx:id="bp">
 
     <bottom>
         <GridPane alignment="TOP_CENTER" hgap="20">
