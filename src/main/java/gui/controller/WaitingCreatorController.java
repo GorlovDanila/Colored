@@ -5,11 +5,13 @@ import gui.scene.DrawerScene;
 import gui.scene.GuesserScene;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import protocols.MessagePacket;
 import server.Server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
@@ -20,6 +22,8 @@ public class WaitingCreatorController {
     public Label creatorLabel;
     @FXML
     public Label lobbyId;
+    @FXML
+    public Button startBtn;
 
     public static boolean pauseFlag = true;
 
@@ -27,6 +31,7 @@ public class WaitingCreatorController {
 
     @FXML
     public void startAction(ActionEvent actionEvent) throws IOException, InterruptedException {
+        startBtn.setText("Ожидание...");
         Stage stage = (Stage) connectedLabel.getScene().getWindow();
 //        AuthController.client.writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_GAME);
 //        if (AuthController.client.readPacket().equals("SUBTYPE_START_GAME")) {

@@ -2,11 +2,15 @@ package gui.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
@@ -28,12 +32,36 @@ public class DrawerController {
     public Label timerLabel;
     @FXML
     public Label lobbyIdLabel;
+    @FXML
+    public BorderPane bp;
+
+    public Button newRoundBtn;
+    public Label newRoundLabel;
 
     public GraphicsContext gc;
 
     @FXML
     public void cpAction(ActionEvent actionEvent) {
         gc.setStroke(cp.getValue());
+    }
+
+    public void changeCanvasToBtn() {
+        canvas.setVisible(false);
+
+        GridPane gp = new GridPane();
+        gp.setVgap(8);
+        gp.setAlignment(Pos.CENTER);
+
+        newRoundLabel = new Label("Новый раунд");
+        GridPane.setConstraints(newRoundLabel, 0, 0);
+
+        newRoundBtn = new Button("Начать");
+        GridPane.setConstraints(newRoundBtn, 0, 1);
+
+        gp.getChildren().addAll(newRoundLabel, newRoundBtn);
+
+        bp.setCenter(gp);
+
     }
 
 
@@ -66,5 +94,7 @@ public class DrawerController {
             gc.lineTo(e.getSceneX(), e.getSceneY());
             gc.stroke();
         });
+
+        changeCanvasToBtn();
     }
 }
