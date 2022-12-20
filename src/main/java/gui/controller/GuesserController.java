@@ -7,8 +7,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+
+import java.io.IOException;
 
 public class GuesserController {
     @FXML
@@ -22,7 +26,7 @@ public class GuesserController {
     @FXML
     public Label lobbyIdLabel;
     @FXML
-    public Canvas canvas;
+    public ImageView iv;
     @FXML
     public BorderPane bp;
 
@@ -33,8 +37,7 @@ public class GuesserController {
     }
 
     public void changeCanvasToBtn() {
-        canvas.setVisible(false);
-
+        iv.setVisible(false);
         GridPane gp = new GridPane();
         gp.setVgap(8);
         gp.setAlignment(Pos.CENTER);
@@ -48,6 +51,16 @@ public class GuesserController {
         gp.getChildren().addAll(newRoundLabel, newRoundBtn);
 
         bp.setCenter(gp);
+
+    }
+
+    @FXML
+    public void initialize() throws IOException, InterruptedException {
+
+            iv.setImage(new Image("/test.png"));
+            Thread.sleep(5000);
+            iv.setImage(new Image("/tset.png"));
+
 
     }
 }

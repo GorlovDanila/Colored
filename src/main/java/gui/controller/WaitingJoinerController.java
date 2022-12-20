@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import static javafx.application.Application.STYLESHEET_CASPIAN;
+import static javafx.application.Application.setUserAgentStylesheet;
+
 public class WaitingJoinerController {
     @FXML
     public Label connectedLabel;

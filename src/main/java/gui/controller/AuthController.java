@@ -21,7 +21,7 @@ public class AuthController {
     @FXML
     public TextField nameInput;
     @FXML
-    public int newLobby;
+    public TextField membersInput;
 
     @FXML
     public void joinLobbyAction(ActionEvent actionEvent) throws IOException {

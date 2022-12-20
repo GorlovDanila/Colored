@@ -15,6 +15,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
+import static javafx.application.Application.STYLESHEET_CASPIAN;
+import static javafx.application.Application.setUserAgentStylesheet;
+
 public class WaitingCreatorController {
     @FXML
     public Label connectedLabel;

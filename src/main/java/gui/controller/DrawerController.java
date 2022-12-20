@@ -95,6 +95,5 @@ public class DrawerController {
             gc.stroke();
         });
 
-        changeCanvasToBtn();
     }
 }

@@ -25,23 +25,29 @@
                GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
     <Label text="Создать лобби: "
-           GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+           GridPane.columnIndex="0" GridPane.rowIndex="3"/>
 
     <TextField id="newLobbyInput" fx:id="newLobbyInput"
-               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+               GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+    <Label text="Максимальное кол-во игроков: "
+           GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+
+    <TextField id="nameInput" fx:id="membersInput"
+               GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
     <Button id="newLobbyBtn" text="Ok"
             onAction="#newLobbyAction" fx:id="newLobbyBtn"
-            GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+            GridPane.columnIndex="2" GridPane.rowIndex="4"/>
 
     <Label text="Присоединиться к лобби: "
-           GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+           GridPane.columnIndex="0" GridPane.rowIndex="7"/>
 
     <TextField id="joinLobbyInput" fx:id="joinLobbyInput"
-               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+               GridPane.columnIndex="1" GridPane.rowIndex="7"/>
 
     <Button id="joinLobbyBtn" text="Ok"
             onAction="#joinLobbyAction" fx:id="joinLobbyBtn"
-            GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+            GridPane.columnIndex="2" GridPane.rowIndex="7"/>
 
 </GridPane>
