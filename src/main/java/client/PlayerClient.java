@@ -40,6 +40,14 @@ public class PlayerClient {
         this.serverIp = serverIp;
     }
 
+    public PlayerThread getGameThread() {
+        return gameThread;
+    }
+
+    public void setGameThread(PlayerThread gameThread) {
+        this.gameThread = gameThread;
+    }
+
     public void start() throws IOException {
         clientSocket = new Socket(serverIp, 8000);
         this.reader = createReader();
@@ -78,6 +86,36 @@ public class PlayerClient {
             packet.setValue(id, message);
             writer.write(packet.toByteArray());
             writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void writeMessage(int type, int subtype) {
+        try {
+            MessagePacket packet = MessagePacket.create((byte) type, (byte) subtype);
+            writer.write(packet.toByteArray());
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String readPacket() {
+        try {
+            String result = "";
+            MessagePacket packet = MessagePacket.parse(readInput(reader));
+            assert packet != null;
+            switch (packet.getPacketSubtype()) {
+                case MessagePacket.SUBTYPE_START_GAME -> result = "SUBTYPE_START_GAME";
+                case MessagePacket.SUBTYPE_END_GAME -> result = "SUBTYPE_END_GAME";
+                case MessagePacket.SUBTYPE_START_ROUND -> result = "SUBTYPE_START_ROUND";
+                case MessagePacket.SUBTYPE_END_ROUND -> result = "SUBTYPE_END_ROUND";
+                case MessagePacket.SUBTYPE_NEXT_ROUND -> result = "SUBTYPE_NEXT_ROUND";
+                case MessagePacket.SUBTYPE_CORRECT_WORD -> result = "SUBTYPE_CORRECT_WORD";
+                case MessagePacket.SUBTYPE_JSON -> result = "SUBTYPE_JSON";
+            }
+            return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

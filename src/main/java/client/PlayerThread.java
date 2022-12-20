@@ -1,5 +1,6 @@
 package client;
 
+import core.Room;
 import protocols.MessagePacket;
 
 import java.io.*;
@@ -72,48 +73,93 @@ public class PlayerThread implements Runnable {
 
     @Override
     public void run() {
+        //ПЕРЕПИСАТЬ ВСЁ НА МЕТОДЫ
         //            while (isGameActive) {
         System.out.println("Connected to server");
-        writeObject(client.getName(), 4, 5, 1);
-        writeObject(client.getIdOfRoom(), 4, 5, 2);
+//        writeObject(client.getName(), 4, 5, 1);
+//        writeObject(client.getIdOfRoom(), 4, 5, 2);
+//        Object response = readObject(2);
+//        System.out.println("Response: " + response.toString());
+//        writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_GAME);
+//        writeObject("SUBTYPE_START_GAME", 4, 5, 3);
         Object response = readObject(2);
-        System.out.println("Response: " + response.toString());
+        System.out.println(response);
         response = readObject(2);
-        System.out.println("Response: " + response.toString());
-        response = readObject(2);
-        System.out.println("Response: " + response.toString());
-        String role = (String) response;
-        System.out.println(role);
-
-        if (role.equals("Вы рисующий")) {
-            client.setRole("Drawer");
-            //загадывается слово
-            response = readObject(3);
-            System.out.println("Response: " + response.toString());
-
-            System.out.println("Word");
-            //что-то нарисовал
-            String request = "Visaginias1";
-            System.out.println("Request: " + request);
-            writeObject(request, 4, 5, 1);
-
+        System.out.println(response);
+        response = readPacket();
+//        System.out.println(response);
+        if (response.equals("SUBTYPE_START_GAME")) {
             response = readObject(2);
             System.out.println("Response: " + response.toString());
-        } else {
-            client.setRole("Guesser");
-            //ждём пока рисующий закончит
+//            response = readObject(2);
+//            System.out.println("Response: " + response.toString());
+            String role = (String) response;
+            System.out.println(role);
 
-            // получаем доску
-            response = readObject(2);
-            System.out.println("Response: " + response.toString());
+            if (role.equals("Вы рисующий")) {
+                client.setRole("Drawer");
+//                writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
+                //загадывается слово
+//                writeObject("Roles Complete", 4, 5, 3);
+                response = readObject(3);
+                System.out.println("Response: " + response.toString());
+                writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
+                //что-то нарисовал
 
-            //считываем ответ игрока
-            String request = "Visaginias1";
-            System.out.println("Request: " + request);
-            writeObject(request, 4, 5, 1);
+                String request = "Visaginias1";
+                System.out.println("Request: " + request);
+                writeObject(request, 4, 5, 1);
 
-            response = readObject(2);
-            System.out.println("Response: " + response.toString());
+//                response = readObject(2);
+//                System.out.println("Response: " + response.toString());
+            } else {
+                client.setRole("Guesser");
+                writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
+                //ждём пока рисующий закончит
+
+                // получаем доску
+//                response = readObject(2);
+//                System.out.println("Response: " + response.toString());
+//
+//                //считываем ответ игрока
+//                String request = "Visaginias1";
+//                System.out.println("Request: " + request);
+//                writeObject(request, 4, 5, 1);
+//
+//                response = readObject(2);
+//                System.out.println("Response: " + response.toString());
+            }
+        }
+    }
+
+
+    public String readPacket() {
+        try {
+            String result = "";
+            MessagePacket packet = MessagePacket.parse(readInput(reader));
+            assert packet != null;
+            switch (packet.getPacketSubtype()) {
+                case MessagePacket.SUBTYPE_START_GAME -> result = "SUBTYPE_START_GAME";
+                case MessagePacket.SUBTYPE_END_GAME -> result = "SUBTYPE_END_GAME";
+                case MessagePacket.SUBTYPE_START_ROUND -> result = "SUBTYPE_START_ROUND";
+                case MessagePacket.SUBTYPE_END_ROUND -> result = "SUBTYPE_END_ROUND";
+                case MessagePacket.SUBTYPE_NEXT_ROUND -> result = "SUBTYPE_NEXT_ROUND";
+                case MessagePacket.SUBTYPE_CORRECT_WORD -> result = "SUBTYPE_CORRECT_WORD";
+                case MessagePacket.SUBTYPE_JSON -> result = "SUBTYPE_JSON";
+            }
+            return result;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void writeMessage(int type, int subtype) {
+        try {
+            MessagePacket packet = MessagePacket.create((byte) type, (byte) subtype);
+            writer.write(packet.toByteArray());
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
