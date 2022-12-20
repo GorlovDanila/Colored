@@ -30,7 +30,7 @@ public class AuthController {
             client = new PlayerClient("127.0.0.1");
             client.setName(nameInput.getText());
             client.setIdOfRoom(joinLobbyInput.getText());
-            client.start();
+//            client.start();
             try {
                 WaitingJoinerScene.display(stage, 1080, 600);
             } catch (IOException e) {
@@ -48,7 +48,7 @@ public class AuthController {
             client.setName(nameInput.getText());
             client.setIdOfRoom(newLobbyInput.getText());
             client.setLobbyCreatorFlag(true);
-            client.start();
+//            client.start();
             try {
                 WaitingCreatorScene.display(stage, 1080, 600);
             } catch (IOException e) {
