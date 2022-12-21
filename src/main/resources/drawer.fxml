@@ -9,10 +9,12 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BubbleChart?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="gui.controller.DrawerController"
-            id="BorderPane">
+            id="BorderPane"
+            fx:id="bp">
 
     <top>
         <GridPane hgap="20" alignment="TOP_CENTER">
@@ -56,7 +58,13 @@
     </left>
 
     <center>
-        <Canvas fx:id="canvas" height="480.0" width="720.0"/>
+        <Canvas fx:id="canvas" height="480.0" width="720.0" visible="false" />
+        <GridPane fx:id="gp" vgap="8.0" alignment="CENTER" >
+            <Label text="Новый раунд" fx:id="newRoundLabel"
+                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Button text="Начать" fx:id="newRoundBtn" onAction="#roundBtnAction"
+                    GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        </GridPane>
     </center>
 
 </BorderPane>

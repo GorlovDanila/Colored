@@ -31,7 +31,7 @@
     <Label text="1" fx:id="connectedLabel"
            GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-    <Button id="startBtn" text="Начать"
+    <Button id="startBtn" text="Готов"
             onAction="#startAction" fx:id="startBtn"
             GridPane.columnIndex="0" GridPane.rowIndex="3"/>
 

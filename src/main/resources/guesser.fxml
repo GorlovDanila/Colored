@@ -9,10 +9,12 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="gui.controller.GuesserController"
-            id="BorderPane">
+            id="BorderPane"
+            fx:id="bp">
 
     <bottom>
         <GridPane alignment="TOP_CENTER" hgap="20">
@@ -45,7 +47,17 @@
     </left>
 
     <center>
-        <Canvas fx:id="canvas" height="480.0" width="720.0"/>
+        <ImageView fx:id="iv"
+                   fitHeight="480.0" fitWidth="720.0"
+                   pickOnBounds="true"
+                   preserveRatio="true"
+                   visible="false"/>
+        <GridPane fx:id="gp" vgap="8.0" alignment="CENTER">
+            <Label text="Новый раунд" fx:id="newRoundLabel"
+                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Button text="Начать" fx:id="newRoundBtn" onAction="#roundBtnAction"
+                    GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        </GridPane>
     </center>
 
 </BorderPane>

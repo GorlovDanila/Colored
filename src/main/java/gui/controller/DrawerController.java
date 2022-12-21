@@ -7,12 +7,16 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import protocols.MessagePacket;
 
@@ -38,6 +42,14 @@ public class DrawerController {
     public Label timerLabel;
     @FXML
     public Label lobbyIdLabel;
+    @FXML
+    public BorderPane bp;
+    @FXML
+    public Button newRoundBtn;
+    @FXML
+    public Label newRoundLabel;
+    @FXML
+    public GridPane gp;
 
     public GraphicsContext gc;
 
@@ -58,6 +70,23 @@ public class DrawerController {
 //            return 1;
 //        }
 //    };
+
+
+    public void changeVisibility() {
+        if (canvas.isVisible()) {
+            canvas.setVisible(false);
+            bp.getChildren().remove(canvas);
+            gp.setVisible(true);
+            bp.getChildren().add(gp);
+            bp.setCenter(gp);
+        } else {
+            gp.setVisible(false);
+            bp.getChildren().remove(gp);
+            canvas.setVisible(true);
+            bp.getChildren().add(canvas);
+            bp.setCenter(canvas);
+        }
+    }
 
 
     @FXML
@@ -89,6 +118,7 @@ public class DrawerController {
             gc.lineTo(e.getSceneX(), e.getSceneY());
             gc.stroke();
         });
+
 //        task.setOnSucceeded((EventHandler<WorkerStateEvent>) event -> {
 //            int result = (int) task.getValue(); // result of computation
 //            // update UI with result
@@ -129,7 +159,16 @@ public class DrawerController {
 //        }
     }
 
-    public File onSave() {
+         gp.getChildren().remove(canvas);
+
+    
+
+    @FXML
+    public void roundBtnAction(ActionEvent actionEvent) {
+        changeVisibility();
+
+    }
+     public File onSave() {
         try {
             WritableImage writableImage = canvas.snapshot(null, null);
             ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", new File("src/main/resources/DrawImages/drawable.png"));
@@ -137,5 +176,5 @@ public class DrawerController {
             throw new RuntimeException(e);
         }
         return new File("src/main/resources/DrawImages/drawable.png");
-    }
+        }
 }

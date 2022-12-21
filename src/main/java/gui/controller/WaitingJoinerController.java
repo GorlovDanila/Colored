@@ -6,6 +6,7 @@ import gui.scene.DrawerScene;
 import gui.scene.GuesserScene;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import protocols.MessagePacket;
@@ -15,6 +16,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import static javafx.application.Application.STYLESHEET_CASPIAN;
+import static javafx.application.Application.setUserAgentStylesheet;
+
 public class WaitingJoinerController {
     @FXML
     public Label connectedLabel;
@@ -22,6 +26,8 @@ public class WaitingJoinerController {
     public Label creatorLabel;
     @FXML
     public Label lobbyId;
+    @FXML
+    public Button startBtn;
 
     public static CountDownLatch latch = new CountDownLatch(1);
 
@@ -30,6 +36,7 @@ public class WaitingJoinerController {
 
     @FXML
     public void startAction(ActionEvent actionEvent) throws IOException, InterruptedException {
+        startBtn.setText("Ожидание...");
         Stage stage = (Stage) connectedLabel.getScene().getWindow();
 
         AuthController.client.start();
