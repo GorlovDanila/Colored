@@ -29,6 +29,8 @@ public class GuesserController {
     public ImageView iv;
     @FXML
     public BorderPane bp;
+    @FXML
+    public GridPane gp;
 
     public Button newRoundBtn;
     public Label newRoundLabel;
@@ -36,31 +38,30 @@ public class GuesserController {
     public void wordBtnAction(ActionEvent actionEvent) {
     }
 
-    public void changeCanvasToBtn() {
-        iv.setVisible(false);
-        GridPane gp = new GridPane();
-        gp.setVgap(8);
-        gp.setAlignment(Pos.CENTER);
+    public void changeVisibility() {
+        if (iv.isVisible()) {
+            iv.setVisible(false);
+            bp.getChildren().remove(iv);
+            gp.setVisible(true);
+            bp.getChildren().add(gp);
+            bp.setCenter(gp);
+        } else {
+            gp.setVisible(false);
+            bp.getChildren().remove(gp);
+            iv.setVisible(true);
+            bp.getChildren().add(iv);
+            bp.setCenter(iv);
+        }
+    }
 
-        newRoundLabel = new Label("Новый раунд");
-        GridPane.setConstraints(newRoundLabel, 0, 0);
-
-        newRoundBtn = new Button("Начать");
-        GridPane.setConstraints(newRoundBtn, 0, 1);
-
-        gp.getChildren().addAll(newRoundLabel, newRoundBtn);
-
-        bp.setCenter(gp);
-
+    @FXML
+    public void roundBtnAction(ActionEvent actionEvent) {
+        changeVisibility();
     }
 
     @FXML
     public void initialize() throws IOException, InterruptedException {
-
-            iv.setImage(new Image("/test.png"));
-            Thread.sleep(5000);
-            iv.setImage(new Image("/tset.png"));
-
-
+        iv.setImage(new Image("/test.png"));
+        gp.getChildren().remove(iv);
     }
 }

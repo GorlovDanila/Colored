@@ -50,7 +50,14 @@
         <ImageView fx:id="iv"
                    fitHeight="480.0" fitWidth="720.0"
                    pickOnBounds="true"
-                   preserveRatio="true" />
+                   preserveRatio="true"
+                   visible="false"/>
+        <GridPane fx:id="gp" vgap="8.0" alignment="CENTER">
+            <Label text="Новый раунд" fx:id="newRoundLabel"
+                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Button text="Начать" fx:id="newRoundBtn" onAction="#roundBtnAction"
+                    GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        </GridPane>
     </center>
 
 </BorderPane>
