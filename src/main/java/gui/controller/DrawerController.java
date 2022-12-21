@@ -157,11 +157,8 @@ public class DrawerController {
 //            AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
 //            Thread.sleep(5000);
 //        }
-    }
-
          gp.getChildren().remove(canvas);
-
-    
+}
 
     @FXML
     public void roundBtnAction(ActionEvent actionEvent) {
