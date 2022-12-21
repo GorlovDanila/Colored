@@ -34,9 +34,12 @@ public class DrawerController {
     public Label lobbyIdLabel;
     @FXML
     public BorderPane bp;
-
+    @FXML
     public Button newRoundBtn;
+    @FXML
     public Label newRoundLabel;
+    @FXML
+    public GridPane gp;
 
     public GraphicsContext gc;
 
@@ -45,23 +48,21 @@ public class DrawerController {
         gc.setStroke(cp.getValue());
     }
 
-    public void changeCanvasToBtn() {
-        canvas.setVisible(false);
 
-        GridPane gp = new GridPane();
-        gp.setVgap(8);
-        gp.setAlignment(Pos.CENTER);
-
-        newRoundLabel = new Label("Новый раунд");
-        GridPane.setConstraints(newRoundLabel, 0, 0);
-
-        newRoundBtn = new Button("Начать");
-        GridPane.setConstraints(newRoundBtn, 0, 1);
-
-        gp.getChildren().addAll(newRoundLabel, newRoundBtn);
-
-        bp.setCenter(gp);
-
+    public void changeVisibility() {
+        if (canvas.isVisible()) {
+            canvas.setVisible(false);
+            bp.getChildren().remove(canvas);
+            gp.setVisible(true);
+            bp.getChildren().add(gp);
+            bp.setCenter(gp);
+        } else {
+            gp.setVisible(false);
+            bp.getChildren().remove(gp);
+            canvas.setVisible(true);
+            bp.getChildren().add(canvas);
+            bp.setCenter(canvas);
+        }
     }
 
 
@@ -95,5 +96,12 @@ public class DrawerController {
             gc.stroke();
         });
 
+        gp.getChildren().remove(canvas);
+
+    }
+
+    @FXML
+    public void roundBtnAction(ActionEvent actionEvent) {
+        changeVisibility();
     }
 }
