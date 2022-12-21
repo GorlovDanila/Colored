@@ -28,7 +28,7 @@ public class WaitingCreatorController {
     @FXML
     public Button startBtn;
 
-    public static boolean pauseFlag = true;
+    public static boolean nextSceneFlag = false;
 
     public static CountDownLatch latch = new CountDownLatch(1);
 
@@ -38,6 +38,7 @@ public class WaitingCreatorController {
         Stage stage = (Stage) connectedLabel.getScene().getWindow();
 //        AuthController.client.writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_GAME);
 //        if (AuthController.client.readPacket().equals("SUBTYPE_START_GAME")) {
+        int count = 0;
         AuthController.client.start();
         AuthController.client.getGameThread().writeObject(AuthController.client.getName(), 4, 5, 1);
         AuthController.client.getGameThread().writeObject(AuthController.client.getIdOfRoom(), 4, 5, 2);
@@ -50,7 +51,7 @@ public class WaitingCreatorController {
 //        CountDownLatch latch = new CountDownLatch(1);
 //        altch.await();
 //        latch.countDown();
-        int count = 0;
+        count = 0;
         while (AuthController.client.getRole() == null) {
             Thread.sleep(1000);
         }
@@ -62,11 +63,13 @@ public class WaitingCreatorController {
 //            Server.startGame(stage);
                 DrawerScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
                         1080, 600);
-//                    gameStartFlag = true;
+                nextSceneFlag = true;
+//
             } else {
 //            Server.startGame(stage);
                 GuesserScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
                         1080, 600);
+                nextSceneFlag = true;
 //                    gameStartFlag = true;
             }
         }

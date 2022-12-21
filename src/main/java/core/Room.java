@@ -1,9 +1,8 @@
 package core;
 
-import gui.controller.WaitingCreatorController;
-import gui.controller.WaitingJoinerController;
 import protocols.MessagePacket;
 
+import java.io.File;
 import java.util.List;
 
 public class Room implements Runnable {
@@ -12,9 +11,11 @@ public class Room implements Runnable {
 
     private int playersCount;
 
+    public static boolean getBoardFlag = false;
+
 //    public static boolean isGameActive = false;
 
-    public  List<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
@@ -40,25 +41,26 @@ public class Room implements Runnable {
 //        System.out.println(WaitingCreatorController.gameStartFlag);
 //        if (WaitingCreatorController.gameStartFlag) {
         //ПЕРЕПИСАТЬ ВСЁ НА МЕТОДЫ
-            if (playersCount == players.size()) {
+        if (playersCount == players.size()) {
 
 //                System.out.println("Game started...\n");
 //                for (Player player : players) {
 //                    player.writeObject("Game started...", 4, 5, 2);
 //                }
 
+            GameLogic logic = new GameLogic();
+            setCorrectWord(logic);
+            startGame(players);
+            sendPacket(players, MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_GAME);
 
-                startGame(players);
-                sendPacket(players, MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_GAME);
 
-
-                GameLogic logic = new GameLogic();
+//            GameLogic logic = new GameLogic();
 
 //                logic.setCorrectWord(currentWord());
-                setCorrectWord(logic);
+//            setCorrectWord(logic);
 
 //                int idOfDrawer = setRoles(players, 0);
-                setRoles(players);
+            setRoles(players);
 
 //                for (Player player : players) {
 //                    if (player.getRole().equals("Drawer")) {
@@ -68,42 +70,31 @@ public class Room implements Runnable {
 //                        player.writeObject("Вы угадывающий", 4, 5, 2);
 //                    }
 //                }
-                notificationPlayersAboutRoles(players, logic);
-                getPacket(players);
-
-                String board = getBoard(players);
+//            sendCorrectWord(players, logic);
+            notificationPlayersAboutRoles(players, logic);
+            getPacket(players);
+            //sendCorrectWord(players, logic);
+            while (logic.isRoundActive()) {
+                File board = getBoard(players);
+                System.out.println(board.toPath());
+                notificationPlayersAboutBoard(players, board);
 //                for (Player player : players) {
 //                    if (player.getRole().equals("Drawer")) {
-//                        board = (String) player.readObject(1);
+//                        player.readObject(4);
 //                    }
 //                }
-
-//                for (Player player : players) {
-//                    if (!player.getRole().equals("Drawer")) {
-//                        player.writeObject(board, 4, 5, 2);
-//                    }
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
 //                }
-
-//                notificationPlayersAboutBoard(players, board);
-//                notificationPlayerAboutGameResult(players, logic);
-
-//                int countOfGuessed = 0;
-                //читаем ответ игрока
-//                for (Player player : players) {
-//                    if (!player.getRole().equals("Drawer")) {
-//                        String word = (String) player.readObject(1);
-//                        if (logic.equalsWords(word)) {
-////                            countOfGuessed++;
-//                            player.writeObject("Вы угадали", 4, 5, 2);
-//                        } else {
-//                            player.writeObject("Вы не угадали", 4, 5, 2);
-//                        }
-//                    }
-//                }
-//
-//                players.get(idOfDrawer).writeObject("Угадало " + countOfGuessed + " игроков", 4, 5, 2);
             }
+
+//            notificationPlayersAboutBoard(players, board);
+//                notificationPlayerAboutGameResult(players, logic);
+//
         }
+    }
 //    }
 
 //    private static void setRoles(List<Player> players, int id) {
@@ -134,12 +125,12 @@ public class Room implements Runnable {
     private static void setRoles(List<Player> players) {
         int idOfDrawer = -1;
         for (int i = 0; i < players.size(); i++) {
-            if(players.get(i).getRole().equals("Drawer")) {
+            if (players.get(i).getRole().equals("Drawer")) {
                 idOfDrawer = i;
                 break;
             }
         }
-        if(idOfDrawer == -1) {
+        if (idOfDrawer == -1) {
             players.get(0).setRole("Drawer");
         } else {
             players.get(idOfDrawer).setRole("Guesser");
@@ -157,17 +148,29 @@ public class Room implements Runnable {
         for (Player player : players) {
             if (player.getRole().equals("Drawer")) {
                 player.writeObject("Вы рисующий", MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 2);
-                player.writeObject(gameLogic.getCorrectWord(), 4, 5, 3);
+//                player.writeObject(gameLogic.getCorrectWord(), 4, 5, 3);
             } else {
                 player.writeObject("Вы угадывающий", 4, 5, 2);
             }
         }
     }
 
-    private static void notificationPlayersAboutBoard(List<Player> players, String board) {
+    private static void sendCorrectWord(List<Player> players, GameLogic gameLogic) {
+        for (Player player : players) {
+            if(player.getRole().equals("Drawer")) {
+                player.writeMessage(MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_CORRECT_WORD);
+                player.writeObject(gameLogic.getCorrectWord(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_CORRECT_WORD, 3);
+            }
+        }
+    }
+
+    private static void notificationPlayersAboutBoard(List<Player> players, File board) {
+        getBoardFlag = true;
         for (Player player : players) {
             if (!player.getRole().equals("Drawer")) {
-                player.writeObject(board, 4, 5, 2);
+                player.setGetBoardFlag(true);
+//                getBoardFlag = true;
+                player.writeObject(board, MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 2);
             }
         }
     }
@@ -191,12 +194,10 @@ public class Room implements Runnable {
         }
 
         for (Player player : players) {
-            if(player.getRole().equals("Drawer")) {
+            if (player.getRole().equals("Drawer")) {
                 player.writeObject(nickGuessed + " угадал", 4, 5, 2);
             }
         }
-
-//        players.get(idOfDrawer).writeObject("Угадало " + countOfGuessed + " игроков", 4, 5, 2);
     }
 
     private static String currentWord() {
@@ -214,11 +215,11 @@ public class Room implements Runnable {
         }
     }
 
-    private String getBoard(List<Player> players) {
-        String board = null;
+    private File getBoard(List<Player> players) {
+        File board = null;
         for (Player player : players) {
             if (player.getRole().equals("Drawer")) {
-                board = (String) player.readObject(1);
+                board = (File) player.readObject(5);
             }
         }
         return board;
@@ -236,21 +237,23 @@ public class Room implements Runnable {
 
     private static void getPacket(List<Player> players) {
         boolean startRoundFlag = true;
+        boolean getBoard = false;
         for (Player player : players) {
-            if(!player.readPacket().equals("SUBTYPE_START_ROUND")) {
+            String subtype = player.readPacket();
+            if (!subtype.equals("SUBTYPE_START_ROUND")) {
                 startRoundFlag = false;
             }
-        }
-        if(startRoundFlag) {
-//            WaitingCreatorController.latch.countDown();
-//            WaitingJoinerController.latch.countDown();
-              WaitingCreatorController.pauseFlag = false;
-//              WaitingJoinerController.pauseFlag = false;
-            for (Player player : players) {
-                player.writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
-//                WaitingCreatorController.latch.countDown();
-//                WaitingJoinerController.latch.countDown();
+            if(subtype.equals("SUBTYPE_JSON")) {
+                getBoard = true;
             }
         }
+        if (startRoundFlag) {
+            for (Player player : players) {
+                player.writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
+            }
+        }
+//        if(getBoard) {
+//
+//        }
     }
 }

@@ -35,8 +35,15 @@ public class GuesserController {
     public Button newRoundBtn;
     public Label newRoundLabel;
 
+    //отсюда берём слово
     public void wordBtnAction(ActionEvent actionEvent) {
+
     }
+
+
+    //берём файл с сервера, сетим картинку по пути, берём ответ игрока, отправляем на сервер(комнату), там проверяем на правильность,
+    // если правильно, прекращаем принимать ответы, отправляем всем игрокам в поток результат, завершаем раунд, начинаем новый
+    // если не правильно, продолжаем принимать ответы
 
     public void changeVisibility() {
         if (iv.isVisible()) {
