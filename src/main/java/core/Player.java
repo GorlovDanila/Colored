@@ -13,6 +13,15 @@ public class Player {
     private String role;
     private String name;
 
+//    public boolean isGetBoardFlag() {
+//        return getBoardFlag;
+//    }
+
+    public void setGetBoardFlag(boolean getBoardFlag) {
+        this.getBoardFlag = getBoardFlag;
+    }
+
+    private boolean getBoardFlag = false;
     private String idOfRoom;
 
     public String getIdOfRoom() {

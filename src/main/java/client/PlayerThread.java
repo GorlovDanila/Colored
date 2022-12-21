@@ -1,6 +1,5 @@
 package client;
 
-import core.Room;
 import protocols.MessagePacket;
 
 import java.io.*;
@@ -10,19 +9,29 @@ public class PlayerThread implements Runnable {
     private final OutputStream writer;
     private final PlayerClient client;
 
+//    public boolean isGetBoardFlag() {
+//        return getBoardFlag;
+//    }
+
+//    public void setGetBoardFlag(boolean getBoardFlag) {
+//       this.getBoardFlag = getBoardFlag;
+//    }
+
+//    public boolean getBoardFlag = false;
+
     public PlayerThread(InputStream reader, OutputStream writer, PlayerClient client) {
         this.reader = reader;
         this.writer = writer;
         this.client = client;
     }
 
-    public InputStream getInput() {
-        return reader;
-    }
+//    public InputStream getInput() {
+//        return reader;
+//    }
 
-    public OutputStream getOutput() {
-        return writer;
-    }
+//    public OutputStream getOutput() {
+//        return writer;
+//    }
 
     public Object readObject(int id) {
         try {
@@ -89,6 +98,11 @@ public class PlayerThread implements Runnable {
         response = readPacket();
 //        System.out.println(response);
         if (response.equals("SUBTYPE_START_GAME")) {
+//            try {
+//                Thread.sleep(10000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
             response = readObject(2);
             System.out.println("Response: " + response.toString());
 //            response = readObject(2);
@@ -101,14 +115,14 @@ public class PlayerThread implements Runnable {
 //                writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
                 //загадывается слово
 //                writeObject("Roles Complete", 4, 5, 3);
-                response = readObject(3);
-                System.out.println("Response: " + response.toString());
+//                response = readObject(3);
+//                System.out.println("Response: " + response.toString());
                 writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
                 //что-то нарисовал
 
-                String request = "Visaginias1";
-                System.out.println("Request: " + request);
-                writeObject(request, 4, 5, 1);
+//                String request = "Visaginias1";
+//                System.out.println("Request: " + request);
+//                writeObject(request, 4, 5, 1);
 
 //                response = readObject(2);
 //                System.out.println("Response: " + response.toString());
@@ -118,6 +132,42 @@ public class PlayerThread implements Runnable {
                 //ждём пока рисующий закончит
 
                 // получаем доску
+//                while (!getBoardFlag) {
+//                    try {
+//                        System.out.println(1);
+//                        Thread.sleep(5000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+
+//                while (true) {
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    response = readObject(2);
+                    System.out.println("Response: " + response.toString());
+//                }
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                response = readObject(2);
+//                System.out.println("Response: " + response.toString());
+               // writeObject(response, MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 4);
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
 //                response = readObject(2);
 //                System.out.println("Response: " + response.toString());
 //

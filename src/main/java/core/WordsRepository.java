@@ -9,7 +9,7 @@ public class WordsRepository {
         return words;
     }
 
-    public int wordsListSize() {
-        return words.size();
-    }
+//    public int wordsListSize() {
+//        return words.size();
+//    }
 }

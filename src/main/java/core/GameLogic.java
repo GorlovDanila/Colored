@@ -5,6 +5,8 @@ public class GameLogic {
 
     private boolean isGameActive;
 
+    private boolean isRoundActive;
+
 //    private Board board;
 //
 //    public Board getBoard() {
@@ -23,8 +25,17 @@ public class GameLogic {
         isGameActive = gameActive;
     }
 
+    public boolean isRoundActive() {
+        return isRoundActive;
+    }
+
+    public void setRoundActive(boolean roundActive) {
+        isRoundActive = roundActive;
+    }
+
     public GameLogic() {
          isGameActive = true;
+         isRoundActive = true;
     }
 
     public void createBoard() {
