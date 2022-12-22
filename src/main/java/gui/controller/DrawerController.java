@@ -1,6 +1,8 @@
 package gui.controller;
 
 import com.google.gson.Gson;
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.embed.swing.SwingFXUtils;
@@ -15,6 +17,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -23,6 +26,8 @@ import protocols.MessagePacket;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class DrawerController {
@@ -55,29 +60,55 @@ public class DrawerController {
 
     public static boolean gameIsActive = true;
 
+    private int count = 0;
+
     @FXML
     public void cpAction(ActionEvent actionEvent) {
         gc.setStroke(cp.getValue());
     }
-
-//    final Task task = new Task() {
-//        @Override
-//        protected Object call() throws Exception {
-//            for (int i = 0; i < 100; i++) {
-//                AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
-//                Thread.sleep(5000);
-//            }
-//            return 1;
+//    class ThreadedTask implements Runnable {
+//
+//        private String message;
+//
+//        public ThreadedTask(){
+////            this.message = message;
 //        }
+//
+//        @Override
+//        public void run() {
+//
+//            AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
+//
+//            //scroll to the bottom of the log
+////            outputLog.setScrollTop(Double.MIN_VALUE);
+//        }
+//    }
 //    };
 
+//    Task task = new Task<Void>() {
+//        @Override
+//        protected Void call() throws Exception {
+//           Gson gson = new Gson();
+//        String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+//        System.out.println(result + "выиграл");
+//        changeVisibility();
+//            return null;
+//        }
+//    };
+//    Timer timer = new Timer();
+//    AnimationTimer timer = new AnimationTimer() {
+//        @Override
+//        public void  (long) {
+//            //Set executable code here
+//        }
+//    };
+//timer.start();
 
     public void changeVisibility() {
         if (canvas.isVisible()) {
             canvas.setVisible(false);
             bp.getChildren().remove(canvas);
             gp.setVisible(true);
-            bp.getChildren().add(gp);
             bp.setCenter(gp);
 
             wordLabel.setVisible(false);
@@ -128,59 +159,65 @@ public class DrawerController {
             gc.setLineWidth(value);
         });
 
+
+        canvas.setOnMousePressed(e -> {
+            gc.beginPath();
+            gc.lineTo(e.getSceneX(), e.getSceneY());
+            gc.stroke();
+        });
+
+        canvas.setOnMouseDragged(e -> {
+            gc.lineTo(e.getSceneX(), e.getSceneY());
+            gc.stroke();
+            AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
+//            Gson gson = new Gson();
+//                String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+//                System.out.println(result + "выиграл");
+        });
+
+        bp.getChildren().remove(canvas);
+
+//        canvas.setOnMouseClicked(mouseEvent ->  {
+//                Gson gson = new Gson();
+//                String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+//                System.out.println(result + "выиграл");
+////                try {
+////                    Thread.sleep(5000);
+////                } catch (InterruptedException e) {
+////                    throw new RuntimeException(e);
+////                }
+//                changeVisibility();
 //        task.setOnSucceeded((EventHandler<WorkerStateEvent>) event -> {
 //            int result = (int) task.getValue(); // result of computation
 //            // update UI with result
 //
 //
+
 //        });
-//
-//        Thread t = new Thread(task);
-//        t.setDaemon(true); // thread will not prevent application shutdown
-//        t.start();
-//        Thread.sleep(10000);
-//        new Thread(() -> {
-//            while (gameIsActive) {
-//                AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
-        //AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
-//            Thread.sleep(5000);
-//        }
-//        }).start();
-//        while (gameIsActive) {
-        Gson gson = new Gson();
-//        Thread.sleep(5000);
-//        while (!WaitingCreatorController.nextSceneFlag) {
-//            System.out.println(1);
-//            Thread.sleep(1000);
-//        }
-//        if(AuthController.client.getGameThread().readPacket().equals("SUBTYPE_CORRECT_WORD")) {
-//            String correctWord = (String) AuthController.client.getGameThread().readObject(3);
-//            System.out.println(correctWord);
-//            wordLabel.setText(correctWord);
-            AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
-//        }
-////            AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
-////            Thread.sleep(5000);
-//        }
-//        for (int i = 0; i < 100; i++) {
-//            AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
-//            Thread.sleep(5000);
-//        }
-         gp.getChildren().remove(canvas);
-}
+    }
 
     @FXML
-    public void roundBtnAction(ActionEvent actionEvent) {
+    public void roundBtnAction(ActionEvent actionEvent) throws InterruptedException {
+        AuthController.client.getGameThread().writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
+//        System.out.println(AuthController.client.getGameThread().readPacket());
+        String correctWord = (String) AuthController.client.getGameThread().readObject(3);
+        System.out.println(correctWord);
+        wordLabel.setText(correctWord);
         changeVisibility();
 
+        AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
     }
-     public File onSave() {
+
+
+
+    public File onSave() {
         try {
+            count++;
             WritableImage writableImage = canvas.snapshot(null, null);
-            ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", new File("src/main/resources/DrawImages/drawable.png"));
+            ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", new File("src/main/resources/DrawImages/drawable" + count + ".png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new File("src/main/resources/DrawImages/drawable.png");
-        }
+        return new File("src/main/resources/DrawImages/drawable" + count + ".png");
+    }
 }

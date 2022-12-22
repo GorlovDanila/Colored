@@ -1,9 +1,10 @@
 package gui.controller;
 
+import com.google.gson.Gson;
+import core.Room;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,7 +12,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import protocols.MessagePacket;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class GuesserController {
@@ -35,9 +39,18 @@ public class GuesserController {
     public Button newRoundBtn;
     public Label newRoundLabel;
 
+    public int count = 0;
     //отсюда берём слово
     public void wordBtnAction(ActionEvent actionEvent) {
-
+        Gson gson = new Gson();
+        AuthController.client.getGameThread().writeObject(wordInput.getText(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_JSON, 1);
+        String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+        System.out.println(result);
+        if(result.equals("Вы угадали")) {
+            //System.out.println(AuthController.client.getName() + " выиграл");
+            Room.logic.setRoundActive(false);
+            changeVisibility();
+        }
     }
 
 
@@ -50,7 +63,6 @@ public class GuesserController {
             iv.setVisible(false);
             bp.getChildren().remove(iv);
             gp.setVisible(true);
-            bp.getChildren().add(gp);
             bp.setCenter(gp);
 
             wordBtn.setVisible(false);
@@ -59,7 +71,6 @@ public class GuesserController {
             gp.setVisible(false);
             bp.getChildren().remove(gp);
             iv.setVisible(true);
-            bp.getChildren().add(iv);
             bp.setCenter(iv);
 
             wordBtn.setVisible(true);
@@ -68,13 +79,44 @@ public class GuesserController {
     }
 
     @FXML
-    public void roundBtnAction(ActionEvent actionEvent) {
+    public void roundBtnAction(ActionEvent actionEvent) throws InterruptedException {
+//        changeVisibility();
+        AuthController.client.getGameThread().writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
         changeVisibility();
+        String p = (String) AuthController.client.getGameThread().readObject(2);
+//        System.out.println(p);
+        count++;
+        iv.setImage(new Image(p));
+
+        iv.setOnMouseMoved(mouseEvent -> {
+            Image image = null;
+            count++;
+            String path1 = (String) AuthController.client.getGameThread().readObject(2);
+            String path = "/DrawImages/drawable2.png";
+            System.out.println(path);
+            try {
+                image = new Image(new FileInputStream(path));
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            iv.setImage(image);
+        });
+//        System.out.println(count);
+//        while (true) {
+           // iv.setImage(new Image((String) AuthController.client.getGameThread().readObject(2)));
+//        }
+//        System.out.println(2);
+//            Thread.sleep(5000);
+//            iv.setImage(new Image((String) AuthController.client.getGameThread().readObject(2)));
+//        System.out.println(3);
+           // iv.setImage(new Image((String) AuthController.client.getGameThread().readObject(2)));
+//        }
+//        changeVisibility();
     }
 
     @FXML
     public void initialize() throws IOException, InterruptedException {
         iv.setImage(new Image("/test.png"));
-        gp.getChildren().remove(iv);
+        bp.getChildren().remove(iv);
     }
 }
