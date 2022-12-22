@@ -3,6 +3,7 @@ package gui.controller;
 import com.google.gson.Gson;
 import core.Room;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -94,15 +95,41 @@ public class GuesserController {
 
         iv.setImage(SwingFXUtils.toFXImage(ImageIO.read(file), null));
 
-        iv.setOnMouseMoved(mouseEvent -> {
-            file = (File) AuthController.client.getGameThread().readObject(2);
-            try {
-                Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
-                iv.setImage(image);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+
+
+        Thread thread = new Thread(() -> {
+            Runnable updater = () -> {
+                file = (File) AuthController.client.getGameThread().readObject(2);
+                try {
+                    Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
+                    iv.setImage(image);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            };
+
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                Platform.runLater(updater);
             }
         });
+        thread.setDaemon(true);
+        thread.start();
+
+//        iv.setOnMouseMoved(mouseEvent -> {
+//            file = (File) AuthController.client.getGameThread().readObject(2);
+//            try {
+//                Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
+//                iv.setImage(image);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
 
 
 //        System.out.println(count);

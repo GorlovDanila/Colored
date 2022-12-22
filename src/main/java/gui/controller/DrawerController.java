@@ -197,7 +197,7 @@ public class DrawerController {
     public File onSave() {
         try {
             WritableImage writableImage = canvas.snapshot(null, null);
-            ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file );
+            ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
