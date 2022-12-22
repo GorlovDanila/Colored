@@ -79,12 +79,16 @@ public class DrawerController {
             gp.setVisible(true);
             bp.getChildren().add(gp);
             bp.setCenter(gp);
+
+            wordLabel.setVisible(false);
         } else {
             gp.setVisible(false);
             bp.getChildren().remove(gp);
             canvas.setVisible(true);
             bp.getChildren().add(canvas);
             bp.setCenter(canvas);
+
+            wordLabel.setVisible(true);
         }
     }
 

@@ -52,12 +52,18 @@ public class GuesserController {
             gp.setVisible(true);
             bp.getChildren().add(gp);
             bp.setCenter(gp);
+
+            wordBtn.setVisible(false);
+            wordInput.setVisible(false);
         } else {
             gp.setVisible(false);
             bp.getChildren().remove(gp);
             iv.setVisible(true);
             bp.getChildren().add(iv);
             bp.setCenter(iv);
+
+            wordBtn.setVisible(true);
+            wordInput.setVisible(true);
         }
     }
 
