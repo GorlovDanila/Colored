@@ -18,6 +18,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeLineCap;
 import protocols.MessagePacket;
 
 import javax.imageio.ImageIO;
@@ -96,18 +97,19 @@ public class DrawerController {
     public void initCanvas() {
         gc = canvas.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
+        gc.setLineCap(StrokeLineCap.ROUND);
         gc.setLineWidth(1);
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         canvas.setOnMousePressed(e -> {
             gc.beginPath();
-            gc.lineTo(e.getSceneX(), e.getSceneY());
+            gc.lineTo(e.getX(), e.getY());
             gc.stroke();
         });
 
         canvas.setOnMouseDragged(e -> {
-            gc.lineTo(e.getSceneX(), e.getSceneY());
+            gc.lineTo(e.getX(), e.getY());
             gc.stroke();
         });
     }
