@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
 
-<?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.BubbleChart?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="gui.controller.DrawerController"
-            id="BorderPane"
-            fx:id="bp"
-            minWidth="1080"
-            minHeight="600">
+<BorderPane id="BorderPane" fx:id="bp" minHeight="600" minWidth="1080" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.DrawerController">
 
     <top>
-        <GridPane hgap="20" alignment="TOP_CENTER">
+        <GridPane alignment="TOP_CENTER" hgap="20">
 
             <padding>
-                <Insets top="20" right="0" bottom="0" left="0"/>
+                <Insets bottom="0" left="0" right="0" top="20"/>
             </padding>
 
             <ColorPicker fx:id="cp" onAction="#cpAction" GridPane.columnIndex="0" GridPane.rowIndex="0">
                 <value>
-                    <Color blue="0.0" green="0.0" red="0.0"/>
+                    <Color red="0.0" green="0.0" blue="0.0"/>
                 </value>
             </ColorPicker>
 
-            <Slider fx:id="slider" min="1.0" max="100.0" showTickLabels="true" showTickMarks="true"
+            <Slider fx:id="slider" max="100.0" min="1.0" showTickLabels="true" showTickMarks="true"
                     GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
             <Label fx:id="sliderLabel" text="1.0" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+            <columnConstraints>
+                <ColumnConstraints/>
+                <ColumnConstraints/>
+                <ColumnConstraints/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints/>
+            </rowConstraints>
 
         </GridPane>
     </top>
@@ -45,27 +44,32 @@
 
     <left>
         <GridPane alignment="TOP_CENTER" vgap="20">
-            <Label text="Рисует: "
-                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Label text="Рисует: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
 
-            <Label text="Nickname" fx:id="drawerLabel"
-                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            <Label fx:id="drawerLabel" text="Nickname" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-            <Label text="00:00" fx:id="timerLabel"
-                   GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Label fx:id="timerLabel" text="00:00" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
 
-            <Label text="0000" fx:id="lobbyIdLabel"
-                   GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <Label fx:id="lobbyIdLabel" text="0000" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+
+            <ListView fx:id="listView" maxHeight="300" prefHeight="150.0" prefWidth="247.0" GridPane.columnIndex="0"
+                      GridPane.rowIndex="3"/>
         </GridPane>
     </left>
 
     <center>
-        <Canvas fx:id="canvas" height="480.0" width="720.0" visible="false"/>
-        <GridPane fx:id="gp" vgap="8.0" alignment="CENTER">
-            <Label text="Новый раунд" fx:id="newRoundLabel"
-                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-            <Button text="Начать" fx:id="newRoundBtn" onAction="#roundBtnAction"
-                    GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Canvas fx:id="canvas" height="480.0" visible="false" width="720.0"/>
+        <GridPane fx:id="gp" alignment="CENTER" vgap="8.0">
+            <Label fx:id="newRoundLabel" text="Новый раунд" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Button fx:id="newRoundBtn" onAction="#roundBtnAction" text="Начать" GridPane.columnIndex="0"
+                    GridPane.rowIndex="1"/>
+            <columnConstraints>
+                <ColumnConstraints/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints/>
+                <RowConstraints/>
+            </rowConstraints>
         </GridPane>
     </center>
 

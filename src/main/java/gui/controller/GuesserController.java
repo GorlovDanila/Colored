@@ -5,8 +5,12 @@ import core.Room;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,6 +39,12 @@ public class GuesserController {
     public BorderPane bp;
     @FXML
     public GridPane gp;
+    @FXML
+    public Label wordLabel;
+    @FXML
+    public ListView<String> listView;
+
+    private final String[] players = {"chepugash", "w1nway", "gorloff228"};
 
     public Button newRoundBtn;
     public Label newRoundLabel;
@@ -65,6 +75,7 @@ public class GuesserController {
             gp.setVisible(true);
             bp.setCenter(gp);
 
+            wordLabel.setVisible(false);
             wordBtn.setVisible(false);
             wordInput.setVisible(false);
         } else {
@@ -73,6 +84,7 @@ public class GuesserController {
             iv.setVisible(true);
             bp.setCenter(iv);
 
+            wordLabel.setVisible(true);
             wordBtn.setVisible(true);
             wordInput.setVisible(true);
         }
@@ -118,6 +130,7 @@ public class GuesserController {
 
     @FXML
     public void initialize() throws IOException, InterruptedException {
+        listView.getItems().addAll(players);
         iv.setImage(new Image("/test.png"));
         bp.getChildren().remove(iv);
     }

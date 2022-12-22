@@ -19,7 +19,6 @@ public class Main extends Application {
 
         try {
             stage.setTitle("Colored!");
-            setUserAgentStylesheet(STYLESHEET_MODENA);
             AuthScene.display(stage);
         } catch (Exception e) {
             e.printStackTrace();
