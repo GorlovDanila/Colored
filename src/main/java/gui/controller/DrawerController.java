@@ -10,10 +10,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -51,10 +48,14 @@ public class DrawerController {
     public Label newRoundLabel;
     @FXML
     public GridPane gp;
+    @FXML
+    public ListView<String> listView;
 
     public GraphicsContext gc;
 
     public static boolean gameIsActive = true;
+
+    private final String[] players = {"chepugash", "w1nway", "gorloff228"};
 
     @FXML
     public void cpAction(ActionEvent actionEvent) {
@@ -117,6 +118,8 @@ public class DrawerController {
     @FXML
     public void initialize() throws IOException, InterruptedException {
         initCanvas();
+
+        listView.getItems().addAll(players);
 
         cp.setValue(Color.BLACK);
         cp.setOnAction(e -> {
