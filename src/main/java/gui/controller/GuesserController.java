@@ -2,7 +2,10 @@ package gui.controller;
 
 import com.google.gson.Gson;
 import core.Room;
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -18,9 +21,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import protocols.MessagePacket;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.Buffer;
 
 public class GuesserController {
     @FXML
@@ -46,10 +53,11 @@ public class GuesserController {
 
     private final String[] players = {"chepugash", "w1nway", "gorloff228"};
 
+    File file;
+
     public Button newRoundBtn;
     public Label newRoundLabel;
 
-    public int count = 0;
     //отсюда берём слово
     public void wordBtnAction(ActionEvent actionEvent) {
         Gson gson = new Gson();
@@ -91,28 +99,49 @@ public class GuesserController {
     }
 
     @FXML
-    public void roundBtnAction(ActionEvent actionEvent) throws InterruptedException {
+    public void roundBtnAction(ActionEvent actionEvent) throws InterruptedException, IOException {
 //        changeVisibility();
         AuthController.client.getGameThread().writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
         changeVisibility();
-        String p = (String) AuthController.client.getGameThread().readObject(2);
-        System.out.println(p);
-        count++;
-        iv.setImage(new Image(p));
+        file = (File) AuthController.client.getGameThread().readObject(2);
 
-        iv.setOnMouseMoved(mouseEvent -> {
-//            Image image = null;
-//            count++;
-            String path1 = (String) AuthController.client.getGameThread().readObject(2);
-            String path = "/DrawImages/drawable2.png";
-            System.out.println(path1);
+        iv.setImage(SwingFXUtils.toFXImage(ImageIO.read(file), null));
+
+
+
+        Thread thread = new Thread(() -> {
+            Runnable updater = () -> {
+                file = (File) AuthController.client.getGameThread().readObject(2);
+                try {
+                    Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
+                    iv.setImage(image);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            };
+
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                Platform.runLater(updater);
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+
+//        iv.setOnMouseMoved(mouseEvent -> {
+//            file = (File) AuthController.client.getGameThread().readObject(2);
 //            try {
-//                image = new Image(new FileInputStream(path));
-//            } catch (FileNotFoundException e) {
+//                Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
+//                iv.setImage(image);
+//            } catch (IOException e) {
 //                throw new RuntimeException(e);
 //            }
-            iv.setImage(new Image(path1));
-        });
+//        });
 
 
 //        System.out.println(count);

@@ -22,6 +22,8 @@ import javafx.scene.shape.StrokeLineCap;
 import protocols.MessagePacket;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
@@ -55,6 +57,8 @@ public class DrawerController {
     public GridPane gp;
     @FXML
     public ListView<String> listView;
+
+    File file = new File("src/main/resources/DrawImages/draw.png");
 
     public GraphicsContext gc;
 
@@ -198,12 +202,11 @@ public class DrawerController {
 
     public File onSave() {
         try {
-            count++;
             WritableImage writableImage = canvas.snapshot(null, null);
-            ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", new File("src/main/resources/DrawImages/drawable" + count + ".png"));
+            ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new File("src/main/resources/DrawImages/drawable" + count + ".png");
+        return file;
     }
 }
