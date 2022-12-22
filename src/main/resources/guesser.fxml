@@ -20,14 +20,14 @@
 
     <bottom>
         <GridPane alignment="TOP_CENTER" hgap="20">
-            <Label text="Угадать слово: "
+            <Label text="Угадать слово: " fx:id="wordLabel" visible="false"
                    GridPane.columnIndex="0" GridPane.rowIndex="0"/>
 
-            <TextField id="wordInput" fx:id="wordInput"
+            <TextField id="wordInput" fx:id="wordInput" visible="false"
                        GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
             <Button id="wordBtn" text="Ok"
-                    onAction="#wordBtnAction" fx:id="wordBtn"
+                    onAction="#wordBtnAction" fx:id="wordBtn" visible="false"
                     GridPane.columnIndex="2" GridPane.rowIndex="0"/>
         </GridPane>
     </bottom>
@@ -45,6 +45,9 @@
 
             <Label text="0000" fx:id="lobbyIdLabel"
                    GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+
+            <ListView fx:id="listView" maxHeight="300" prefHeight="150.0" prefWidth="247.0" GridPane.columnIndex="0"
+                      GridPane.rowIndex="3"/>
         </GridPane>
     </left>
 

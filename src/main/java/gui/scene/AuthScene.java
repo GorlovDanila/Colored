@@ -4,6 +4,7 @@ import gui.Main;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 
@@ -15,6 +16,7 @@ public class AuthScene {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/auth.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), WINDOW_W, WINDOW_H);
+            scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
             stage.setMinWidth(600);
             stage.setMinHeight(400);
             stage.setScene(scene);

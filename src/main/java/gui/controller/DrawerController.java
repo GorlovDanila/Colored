@@ -12,15 +12,13 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeLineCap;
 import protocols.MessagePacket;
 
 import javax.imageio.ImageIO;
@@ -57,12 +55,17 @@ public class DrawerController {
     public Label newRoundLabel;
     @FXML
     public GridPane gp;
+    @FXML
+    public ListView<String> listView;
 
     File file = new File("src/main/resources/DrawImages/draw.png");
 
     public GraphicsContext gc;
 
     public static boolean gameIsActive = true;
+
+    private final String[] players = {"chepugash", "w1nway", "gorloff228"};
+    private int count = 0;
 
     @FXML
     public void cpAction(ActionEvent actionEvent) {
@@ -126,18 +129,19 @@ public class DrawerController {
     public void initCanvas() {
         gc = canvas.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
+        gc.setLineCap(StrokeLineCap.ROUND);
         gc.setLineWidth(1);
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         canvas.setOnMousePressed(e -> {
             gc.beginPath();
-            gc.lineTo(e.getSceneX(), e.getSceneY());
+            gc.lineTo(e.getX(), e.getY());
             gc.stroke();
         });
 
         canvas.setOnMouseDragged(e -> {
-            gc.lineTo(e.getSceneX(), e.getSceneY());
+            gc.lineTo(e.getX(), e.getY());
             gc.stroke();
             AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
         });
@@ -146,6 +150,8 @@ public class DrawerController {
     @FXML
     public void initialize() throws IOException, InterruptedException {
         initCanvas();
+
+        listView.getItems().addAll(players);
 
         cp.setValue(Color.BLACK);
         cp.setOnAction(e -> {
