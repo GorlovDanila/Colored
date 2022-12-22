@@ -7,8 +7,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static gui.Main.WINDOW_H;
+import static gui.Main.WINDOW_W;
+
 public class WaitingJoinerScene {
-    public static void display(Stage stage, int WINDOW_W, int WINDOW_H) throws IOException {
+    public static void display(Stage stage) throws IOException {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/waiting_joiner.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), WINDOW_W, WINDOW_H);

@@ -7,8 +7,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
-    public int WINDOW_H = 600;
-    public int WINDOW_W = 1080;
+    public static int WINDOW_H = 600;
+    public static int WINDOW_W = 1080;
 
     public static void main(String[] args) {
         launch();
@@ -20,7 +20,7 @@ public class Main extends Application {
         try {
             stage.setTitle("Colored!");
             setUserAgentStylesheet(STYLESHEET_MODENA);
-            AuthScene.display(stage, WINDOW_W, WINDOW_H);
+            AuthScene.display(stage);
         } catch (Exception e) {
             e.printStackTrace();
         }

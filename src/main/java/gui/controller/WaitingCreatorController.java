@@ -61,14 +61,12 @@ public class WaitingCreatorController {
         if (packet.equals("SUBTYPE_START_ROUND")) {
             if (AuthController.client.getRole().equals("Drawer")) {
 //            Server.startGame(stage);
-                DrawerScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
-                        1080, 600);
+                DrawerScene.display(stage);
                 nextSceneFlag = true;
 //
             } else {
 //            Server.startGame(stage);
-                GuesserScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
-                        1080, 600);
+                GuesserScene.display(stage);
                 nextSceneFlag = true;
 //                    gameStartFlag = true;
             }

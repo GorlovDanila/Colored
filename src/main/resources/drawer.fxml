@@ -14,7 +14,9 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="gui.controller.DrawerController"
             id="BorderPane"
-            fx:id="bp">
+            fx:id="bp"
+            minWidth="1080"
+            minHeight="600">
 
     <top>
         <GridPane hgap="20" alignment="TOP_CENTER">
@@ -58,12 +60,12 @@
     </left>
 
     <center>
-        <Canvas fx:id="canvas" height="480.0" width="720.0" visible="false" />
-        <GridPane fx:id="gp" vgap="8.0" alignment="CENTER" >
+        <Canvas fx:id="canvas" height="480.0" width="720.0" visible="false"/>
+        <GridPane fx:id="gp" vgap="8.0" alignment="CENTER">
             <Label text="Новый раунд" fx:id="newRoundLabel"
                    GridPane.columnIndex="0" GridPane.rowIndex="0"/>
             <Button text="Начать" fx:id="newRoundBtn" onAction="#roundBtnAction"
-                    GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    GridPane.columnIndex="0" GridPane.rowIndex="1"/>
         </GridPane>
     </center>
 

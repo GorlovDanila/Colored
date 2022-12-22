@@ -32,7 +32,7 @@ public class AuthController {
             client.setIdOfRoom(joinLobbyInput.getText());
 //            client.start();
             try {
-                WaitingJoinerScene.display(stage, 1080, 600);
+                WaitingJoinerScene.display(stage);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -50,7 +50,7 @@ public class AuthController {
             client.setLobbyCreatorFlag(true);
 //            client.start();
             try {
-                WaitingCreatorScene.display(stage, 1080, 600);
+                WaitingCreatorScene.display(stage);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
