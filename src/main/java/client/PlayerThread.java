@@ -85,44 +85,23 @@ public class PlayerThread implements Runnable {
         //ПЕРЕПИСАТЬ ВСЁ НА МЕТОДЫ
         //            while (isGameActive) {
         System.out.println("Connected to server");
-//        writeObject(client.getName(), 4, 5, 1);
-//        writeObject(client.getIdOfRoom(), 4, 5, 2);
-//        Object response = readObject(2);
-//        System.out.println("Response: " + response.toString());
-//        writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_GAME);
-//        writeObject("SUBTYPE_START_GAME", 4, 5, 3);
+
         Object response = readObject(2);
         System.out.println(response);
         response = readObject(2);
         System.out.println(response);
         response = readPacket();
-//        System.out.println(response);
+
         if (response.equals("SUBTYPE_START_GAME")) {
-//            try {
-//                Thread.sleep(10000);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
+
             response = readObject(2);
             System.out.println("Response: " + response.toString());
-//            response = readObject(2);
-//            System.out.println("Response: " + response.toString());
             String role = (String) response;
             System.out.println(role);
 
             if (role.equals("Вы рисующий")) {
                 client.setRole("Drawer");
-//                writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
-                //загадывается слово
-//                writeObject("Roles Complete", 4, 5, 3);
-//                response = readObject(3);
-//                System.out.println("Response: " + response.toString());
                 writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
-                //что-то нарисовал
-
-//                String request = "Visaginias1";
-//                System.out.println("Request: " + request);
-//                writeObject(request, 4, 5, 1);
 
 //                response = readObject(2);
 //                System.out.println("Response: " + response.toString());
@@ -147,13 +126,13 @@ public class PlayerThread implements Runnable {
 //                }
 
 //                while (true) {
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    response = readObject(2);
-                    System.out.println("Response: " + response.toString());
+//                    try {
+//                        Thread.sleep(5000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    response = readObject(2);
+//                    System.out.println("Response: " + response.toString());
 //                }
 //                try {
 //                    Thread.sleep(5000);
