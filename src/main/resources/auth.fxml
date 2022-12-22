@@ -30,7 +30,7 @@
     <TextField id="newLobbyInput" fx:id="newLobbyInput"
                GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-    <Label text="Максимальное кол-во игроков: "
+    <Label text="Кол-во игроков: "
            GridPane.columnIndex="0" GridPane.rowIndex="4"/>
 
     <TextField id="nameInput" fx:id="membersInput"

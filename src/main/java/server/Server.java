@@ -50,7 +50,6 @@ public class Server {
 //            }, 0, 1000);
 
                 for (int i = 0; i < 2; i++) {
-                    //players.get(i) = new Player(server);
                     players.add(new Player(server));
                     players.get(i).setName((String) players.get(i).readObject(1));
                     players.get(i).setIdOfRoom((String) players.get(i).readObject(2));
@@ -62,19 +61,13 @@ public class Server {
                 for (int i = 0; i < 2; i++) {
                     String subtype = players.get(i).readPacket();
                     if (!subtype.equals("")) {
-//                        String subtype = players.get(i).readPacket();
-//                        System.out.println(subtype);
                         if (subtype.equals("SUBTYPE_START_GAME")) {
-//                            System.out.println(1);
                             count++;
                         }
                     }
                 }
                 System.out.println(count);
                 if (count == countClients) {
-//                    for (int i = 0; i < 2; i++) {
-//                        players.get(i).writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_GAME);
-//                    }
                     isGameActive = true;
                     room.run();
                 }
