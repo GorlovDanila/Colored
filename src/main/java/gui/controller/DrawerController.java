@@ -137,6 +137,7 @@ public class DrawerController {
         canvas.setOnMouseDragged(e -> {
             gc.lineTo(e.getSceneX(), e.getSceneY());
             gc.stroke();
+            AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
         });
     }
 
@@ -154,22 +155,6 @@ public class DrawerController {
             String str = String.format("%.1f", value);
             sliderLabel.setText(str);
             gc.setLineWidth(value);
-        });
-
-
-        canvas.setOnMousePressed(e -> {
-            gc.beginPath();
-            gc.lineTo(e.getSceneX(), e.getSceneY());
-            gc.stroke();
-        });
-
-        canvas.setOnMouseDragged(e -> {
-            gc.lineTo(e.getSceneX(), e.getSceneY());
-            gc.stroke();
-            AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
-//            Gson gson = new Gson();
-//                String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
-//                System.out.println(result + "выиграл");
         });
 
         bp.getChildren().remove(canvas);

@@ -84,23 +84,25 @@ public class GuesserController {
         AuthController.client.getGameThread().writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
         changeVisibility();
         String p = (String) AuthController.client.getGameThread().readObject(2);
-//        System.out.println(p);
+        System.out.println(p);
         count++;
         iv.setImage(new Image(p));
 
         iv.setOnMouseMoved(mouseEvent -> {
-            Image image = null;
-            count++;
+//            Image image = null;
+//            count++;
             String path1 = (String) AuthController.client.getGameThread().readObject(2);
             String path = "/DrawImages/drawable2.png";
-            System.out.println(path);
-            try {
-                image = new Image(new FileInputStream(path));
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-            iv.setImage(image);
+            System.out.println(path1);
+//            try {
+//                image = new Image(new FileInputStream(path));
+//            } catch (FileNotFoundException e) {
+//                throw new RuntimeException(e);
+//            }
+            iv.setImage(new Image(path1));
         });
+
+
 //        System.out.println(count);
 //        while (true) {
            // iv.setImage(new Image((String) AuthController.client.getGameThread().readObject(2)));
