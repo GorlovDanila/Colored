@@ -45,15 +45,10 @@ public class WaitingCreatorController {
         System.out.println(packet);
         if (packet.equals("SUBTYPE_START_ROUND")) {
             if (AuthController.client.getRole().equals("Drawer")) {
-
-                DrawerScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
-                        1080, 600);
+                DrawerScene.display(stage);
                 nextSceneFlag = true;
-
             } else {
-
-                GuesserScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
-                        1080, 600);
+                GuesserScene.display(stage);
                 nextSceneFlag = true;
 
             }

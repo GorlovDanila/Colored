@@ -110,21 +110,42 @@ public class DrawerController {
             bp.getChildren().remove(canvas);
             gp.setVisible(true);
             bp.setCenter(gp);
+
+            wordLabel.setVisible(false);
         } else {
             gp.setVisible(false);
             bp.getChildren().remove(gp);
             canvas.setVisible(true);
+            initCanvas();
+            bp.getChildren().add(canvas);
             bp.setCenter(canvas);
+
+            wordLabel.setVisible(true);
         }
     }
 
-
-    @FXML
-    public void initialize() throws IOException, InterruptedException {
-
+    public void initCanvas() {
         gc = canvas.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        canvas.setOnMousePressed(e -> {
+            gc.beginPath();
+            gc.lineTo(e.getSceneX(), e.getSceneY());
+            gc.stroke();
+        });
+
+        canvas.setOnMouseDragged(e -> {
+            gc.lineTo(e.getSceneX(), e.getSceneY());
+            gc.stroke();
+        });
+    }
+
+    @FXML
+    public void initialize() throws IOException, InterruptedException {
+        initCanvas();
 
         cp.setValue(Color.BLACK);
         cp.setOnAction(e -> {
@@ -137,6 +158,7 @@ public class DrawerController {
             sliderLabel.setText(str);
             gc.setLineWidth(value);
         });
+
 
         canvas.setOnMousePressed(e -> {
             gc.beginPath();
@@ -165,6 +187,12 @@ public class DrawerController {
 ////                    throw new RuntimeException(e);
 ////                }
 //                changeVisibility();
+//        task.setOnSucceeded((EventHandler<WorkerStateEvent>) event -> {
+//            int result = (int) task.getValue(); // result of computation
+//            // update UI with result
+//
+//
+
 //        });
     }
 
