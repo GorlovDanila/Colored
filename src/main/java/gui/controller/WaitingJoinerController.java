@@ -54,11 +54,9 @@ public class WaitingJoinerController {
             if (AuthController.client.getRole().equals("Drawer")) {
 //                    //клиент отправляет сообщение на сервер с типом старт
 //                    //сюда приходит ответ от сервака,
-                DrawerScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
-                        1080, 600);
+                DrawerScene.display(stage);
             } else {
-                GuesserScene.display(stage, Integer.parseInt(lobbyId.getText()), creatorLabel.getText(),
-                        1080, 600);
+                GuesserScene.display(stage);
             }
         }
     }
