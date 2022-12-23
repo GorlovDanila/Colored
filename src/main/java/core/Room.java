@@ -80,18 +80,11 @@ public class Room implements Runnable {
                 sendCorrectWord(players, logic);
                 while (logic.isRoundActive()) {
                     File board = getBoard(players);
-                    String path = String.valueOf(board.toPath());
-                    path = "/" + path.replace("src\\main\\resources\\", "").replace("\\", "/");
-                    System.out.println(path);
-                    notificationPlayersAboutBoard(players, path);
-//                    try {
-//                        notificationPlayerAboutGameResult(players, logic);
-//                    } catch (ExecutionException | InterruptedException | TimeoutException e) {
-//                        e.printStackTrace();
-//                    }
-                }
-            }
-//        }
+                    notificationPlayersAboutBoard(players, board);
+                    }
+                    //notificationPlayerAboutGameResult(players, logic);
+               }
+          }
     }
 
 
@@ -146,7 +139,7 @@ public class Room implements Runnable {
         }
     }
 
-    private static void notificationPlayersAboutBoard(List<Player> players, String path) {
+    private static void notificationPlayersAboutBoard(List<Player> players, File path) {
         getBoardFlag = true;
         for (Player player : players) {
             if (!player.getRole().equals("Drawer")) {

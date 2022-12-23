@@ -13,18 +13,21 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeLineCap;
 import protocols.MessagePacket;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
@@ -57,12 +60,17 @@ public class DrawerController {
     @FXML
     public Label newRoundLabel;
     @FXML
-    public GridPane gp;
+    public VBox vbox;
+    @FXML
+    public ListView<String> listView;
+
+    File file = new File("src/main/resources/DrawImages/draw.png");
 
     public GraphicsContext gc;
 
     public static boolean gameIsActive = true;
 
+    private final String[] players = {"chepugash", "w1nway", "gorloff228"};
     private int count = 0;
 
     @FXML
@@ -111,15 +119,25 @@ public class DrawerController {
         if (canvas.isVisible()) {
             canvas.setVisible(false);
             bp.getChildren().remove(canvas);
-            gp.setVisible(true);
-            bp.setCenter(gp);
+            vbox.setVisible(true);
+            bp.setCenter(vbox);
+            wordLabel.setVisible(false);
+
+            cp.setVisible(false);
+            slider.setVisible(false);
+            sliderLabel.setVisible(false);
             wordLabel.setVisible(false);
         } else {
-            gp.setVisible(false);
-            bp.getChildren().remove(gp);
+            vbox.setVisible(false);
+            bp.getChildren().remove(vbox);
             canvas.setVisible(true);
             initCanvas();
             bp.setCenter(canvas);
+            wordLabel.setVisible(true);
+
+            cp.setVisible(true);
+            slider.setVisible(true);
+            sliderLabel.setVisible(true);
             wordLabel.setVisible(true);
         }
     }
@@ -127,18 +145,19 @@ public class DrawerController {
     public void initCanvas() {
         gc = canvas.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
+        gc.setLineCap(StrokeLineCap.ROUND);
         gc.setLineWidth(1);
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         canvas.setOnMousePressed(e -> {
             gc.beginPath();
-            gc.lineTo(e.getSceneX(), e.getSceneY());
+            gc.lineTo(e.getX(), e.getY());
             gc.stroke();
         });
 
         canvas.setOnMouseDragged(e -> {
-            gc.lineTo(e.getSceneX(), e.getSceneY());
+            gc.lineTo(e.getX(), e.getY());
             gc.stroke();
             AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
 //            Gson gson = new Gson();
@@ -157,6 +176,8 @@ public class DrawerController {
     @FXML
     public void initialize() throws IOException, InterruptedException {
         initCanvas();
+
+        listView.getItems().addAll(players);
 
         cp.setValue(Color.BLACK);
         cp.setOnAction(e -> {
@@ -218,12 +239,11 @@ public class DrawerController {
 
     public File onSave() {
         try {
-            count++;
             WritableImage writableImage = canvas.snapshot(null, null);
-            ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", new File("src/main/resources/DrawImages/drawable" + AuthController.client.getIdOfRoom() + ".png"));
+            ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new File("src/main/resources/DrawImages/drawable" + count + ".png");
+        return file;
     }
 }
