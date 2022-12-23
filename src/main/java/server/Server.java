@@ -3,7 +3,6 @@ package server;
 import com.google.gson.Gson;
 import core.Player;
 import core.Room;
-import gui.scene.AlertBox;
 
 import java.io.IOException;
 import java.net.ServerSocket;
