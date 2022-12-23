@@ -1,5 +1,7 @@
 package gui.controller;
 
+import com.google.common.util.concurrent.SimpleTimeLimiter;
+import com.google.common.util.concurrent.TimeLimiter;
 import com.google.gson.Gson;
 import core.Room;
 import javafx.application.Application;
@@ -28,6 +30,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.Buffer;
+import java.time.Duration;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeoutException;
 
 public class GuesserController {
     @FXML
@@ -52,6 +58,9 @@ public class GuesserController {
     public ListView<String> listView;
 
     private final String[] players = {"chepugash", "w1nway", "gorloff228"};
+    private static TimeLimiter timeLimiter = SimpleTimeLimiter.create(Executors.newSingleThreadExecutor());
+    private static Duration timeout = Duration.ofMillis(10000);
+
 
     File file;
 
@@ -62,6 +71,7 @@ public class GuesserController {
     public void wordBtnAction(ActionEvent actionEvent) {
         Gson gson = new Gson();
         AuthController.client.getGameThread().writeObject(wordInput.getText(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_JSON, 1);
+
         String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
         System.out.println(result);
         if(result.equals("Вы угадали")) {
@@ -99,8 +109,7 @@ public class GuesserController {
     }
 
     @FXML
-    public void roundBtnAction(ActionEvent actionEvent) throws InterruptedException, IOException {
-//        changeVisibility();
+    public void roundBtnAction(ActionEvent actionEvent) throws InterruptedException, IOException, ExecutionException, TimeoutException {
         AuthController.client.getGameThread().writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
         changeVisibility();
         file = (File) AuthController.client.getGameThread().readObject(2);
@@ -108,31 +117,55 @@ public class GuesserController {
         iv.setImage(SwingFXUtils.toFXImage(ImageIO.read(file), null));
 
 
-
-        Thread thread = new Thread(() -> {
-            Runnable updater = () -> {
-                file = (File) AuthController.client.getGameThread().readObject(2);
-//                thread.interrupt();
-                try {
-                    Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
-                    iv.setImage(image);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            };
-
-            while (true) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-
-                Platform.runLater(updater);
+timeLimiter.callWithTimeout(() -> {
+    Thread thread = new Thread(() -> {
+        Runnable updater = () -> {
+            file = (File) AuthController.client.getGameThread().readObject(2);
+            try {
+                Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
+                iv.setImage(image);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        });
-        thread.setDaemon(true);
-        thread.start();
+        };
+
+        while (true) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            Platform.runLater(updater);
+        }
+    });
+    thread.setDaemon(true);
+    thread.start();
+    return null;
+}, timeout);
+//        Thread thread = new Thread(() -> {
+//            Runnable updater = () -> {
+//                file = (File) AuthController.client.getGameThread().readObject(2);
+//                try {
+//                    Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
+//                    iv.setImage(image);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            };
+//
+//            while (true) {
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException ex) {
+//                    throw new RuntimeException(ex);
+//                }
+//
+//                Platform.runLater(updater);
+//            }
+//        });
+//        thread.setDaemon(true);
+//        thread.start();
     }
 
     @FXML
@@ -140,5 +173,9 @@ public class GuesserController {
         listView.getItems().addAll(players);
         iv.setImage(new Image("/test.png"));
         bp.getChildren().remove(iv);
+
+//        iv.setOnMousePressed(mouseEvent -> {
+//            System.out.println(2);
+//        });
     }
 }

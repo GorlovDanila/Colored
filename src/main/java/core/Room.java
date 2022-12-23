@@ -17,6 +17,7 @@ public class Room implements Runnable {
     private static GameLogic logic = new GameLogic();
     private int playersCount;
 
+    private int count = 0;
     public static boolean getBoardFlag = false;
 
 //    public static boolean isGameActive = false;
@@ -55,16 +56,19 @@ public class Room implements Runnable {
                 long startTime = System.currentTimeMillis();
                 long roundTime;
                 while (logic.isRoundActive()) {
-                    roundTime = System.currentTimeMillis();
-//                    if(roundTime - startTime < 100000L) {
-                    File board = getBoard(players);
-                    System.out.println(board.toPath());
-                    notificationPlayersAboutBoard(players, board);
-                    logic.setRoundActive(false);
+                    count++;
+                    if(count < 100) {
+                        File board = getBoard(players);
+                        System.out.println(board.toPath());
+                        notificationPlayersAboutBoard(players, board);
+                    } else {
+                        logic.setRoundActive(false);
+                        break;
+                    }
                 }
                         //notificationPlayerAboutGameResult(players, logic);
 //                    } else {
-                       logic.setRoundActive(false);
+//                       logic.setRoundActive(false);
 //                       break;
                 System.out.println(getLogic().isRoundActive());
                 notificationPlayerAboutGameResult(players, logic);
@@ -138,11 +142,12 @@ public class Room implements Runnable {
                     String word = gson.fromJson((String) player.readObject(1), String.class);
                     System.out.println(word);
                     if (gameLogic.equalsWords(word)) {
-                        player.writeObject("Вы угадали", 4, 5, 2);
+                        //тип пакета передать
+                        player.writeObject("Вы угадали", 4, 5, 3);
                         nickGuessed = player.getName();
                         break;
                     } else {
-                        player.writeObject("Вы не угадали", 4, 5, 2);
+                        player.writeObject("Вы не угадали", 4, 5, 3);
                     }
                 }
             }

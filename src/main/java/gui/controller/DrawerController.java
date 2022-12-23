@@ -1,5 +1,7 @@
 package gui.controller;
 
+import com.google.common.util.concurrent.SimpleTimeLimiter;
+import com.google.common.util.concurrent.TimeLimiter;
 import com.google.gson.Gson;
 import core.GameLogic;
 import core.Room;
@@ -30,8 +32,12 @@ import javax.imageio.stream.FileImageOutputStream;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeoutException;
 
 
 public class DrawerController {
@@ -70,6 +76,8 @@ public class DrawerController {
 
     private final String[] players = {"chepugash", "w1nway", "gorloff228"};
     private int count = 0;
+    private static TimeLimiter timeLimiter = SimpleTimeLimiter.create(Executors.newSingleThreadExecutor());
+    private static Duration timeout = Duration.ofMillis(10000);
 
     @FXML
     public void cpAction(ActionEvent actionEvent) {
@@ -113,7 +121,7 @@ public class DrawerController {
 //    };
 //timer.start();
 
-    public void changeVisibility() {
+    public void changeVisibility() throws ExecutionException, InterruptedException, TimeoutException {
         if (canvas.isVisible()) {
             canvas.setVisible(false);
             bp.getChildren().remove(canvas);
@@ -130,7 +138,7 @@ public class DrawerController {
         }
     }
 
-    public void initCanvas() {
+    public void initCanvas() throws ExecutionException, InterruptedException, TimeoutException {
         gc = canvas.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineCap(StrokeLineCap.ROUND);
@@ -144,29 +152,47 @@ public class DrawerController {
             gc.stroke();
         });
 
-        canvas.setOnMouseDragged(e -> {
-            System.out.println(Room.getLogic().isRoundActive());
+        timeLimiter.callWithTimeout(() -> {
+            canvas.setOnMouseDragged(e -> {
+                System.out.println(Room.getLogic().isRoundActive());
 //            if(Room.getLogic().isRoundActive()) {
-            gc.lineTo(e.getX(), e.getY());
-            gc.stroke();
+                gc.lineTo(e.getX(), e.getY());
+                gc.stroke();
 //            if(Room.logic.isRoundActive()) {
                 AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
-//            } else {
-//                Gson gson = new Gson();
-//                String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
-//                System.out.println(result + " выиграл");
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (InterruptedException exception) {
-//                    throw new RuntimeException(exception);
-//                }
-//                changeVisibility();
-//            }
-        });
+            });
+            return null;
+        }, timeout);
+//        canvas.setOnMouseDragged(e -> {
+//            System.out.println(Room.getLogic().isRoundActive());
+//
+////            if(Room.getLogic().isRoundActive()) {
+//            gc.lineTo(e.getX(), e.getY());
+//            gc.stroke();
+//
+////            if(Room.logic.isRoundActive()) {
+//
+//                AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
+////
+////            } else {
+////                Gson gson = new Gson();
+////                String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+////                System.out.println(result + " выиграл");
+////                try {
+////                    Thread.sleep(5000);
+////                } catch (InterruptedException exception) {
+////                    throw new RuntimeException(exception);
+////                }
+////                changeVisibility();
+////            }
+//
+//        });
+
+
     }
 
     @FXML
-    public void initialize() throws IOException, InterruptedException {
+    public void initialize() throws IOException, InterruptedException, ExecutionException, TimeoutException {
         initCanvas();
 
         listView.getItems().addAll(players);
@@ -184,6 +210,26 @@ public class DrawerController {
         });
 
         bp.getChildren().remove(canvas);
+
+        canvas.setOnMouseClicked(mouseEvent -> {
+            Gson gson = new Gson();
+                String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+                System.out.println(result);
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException exception) {
+//                    throw new RuntimeException(exception);
+//                }
+            try {
+                changeVisibility();
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (TimeoutException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
 //        canvas.setOnMouseClicked(mouseEvent ->  {
 //                Gson gson = new Gson();
@@ -205,7 +251,7 @@ public class DrawerController {
     }
 
     @FXML
-    public void roundBtnAction(ActionEvent actionEvent) throws InterruptedException {
+    public void roundBtnAction(ActionEvent actionEvent) throws InterruptedException, ExecutionException, TimeoutException {
         AuthController.client.getGameThread().writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
 //        System.out.println(AuthController.client.getGameThread().readPacket());
         String correctWord = (String) AuthController.client.getGameThread().readObject(3);
