@@ -2,20 +2,8 @@ package core;
 
 public class GameLogic {
     private String correctWord;
-
     private boolean isGameActive;
-
     private boolean isRoundActive;
-
-//    private Board board;
-//
-//    public Board getBoard() {
-//        return board;
-//    }
-//
-//    public void setBoard(Board board) {
-//        this.board = board;
-//    }
 
     public boolean isGameActive() {
         return isGameActive;
@@ -37,18 +25,12 @@ public class GameLogic {
          isGameActive = true;
          isRoundActive = true;
     }
-
-    public void createBoard() {
-
-    }
     public String getCorrectWord() {
         return correctWord;
     }
-
     public void setCorrectWord(String correctWord) {
         this.correctWord = correctWord;
     }
-
     public boolean equalsWords(String currentWord) {
         return currentWord.equals(correctWord);
     }

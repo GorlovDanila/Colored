@@ -1,6 +1,8 @@
 package gui.controller;
 
 import com.google.gson.Gson;
+import core.GameLogic;
+import core.Room;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -13,6 +15,8 @@ import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -141,9 +145,23 @@ public class DrawerController {
         });
 
         canvas.setOnMouseDragged(e -> {
+            System.out.println(Room.getLogic().isRoundActive());
+//            if(Room.getLogic().isRoundActive()) {
             gc.lineTo(e.getX(), e.getY());
             gc.stroke();
-            AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
+//            if(Room.logic.isRoundActive()) {
+                AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
+//            } else {
+//                Gson gson = new Gson();
+//                String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+//                System.out.println(result + " выиграл");
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException exception) {
+//                    throw new RuntimeException(exception);
+//                }
+//                changeVisibility();
+//            }
         });
     }
 

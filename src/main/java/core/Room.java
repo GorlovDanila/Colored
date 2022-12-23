@@ -10,7 +10,11 @@ public class Room implements Runnable {
     private final int id;
     private List<Player> players;
 
-    public static GameLogic logic = new GameLogic();
+    public static GameLogic getLogic() {
+        return logic;
+    }
+
+    private static GameLogic logic = new GameLogic();
     private int playersCount;
 
     public static boolean getBoardFlag = false;
@@ -33,12 +37,9 @@ public class Room implements Runnable {
 
     @Override
     public void run() {
-//ЛЮДИ ОБЩАЮТСЯ ЧЕРЕЗ СЕРВАК
 
-        //ПЕРЕПИСАТЬ ВСЁ НА МЕТОДЫ
         if (playersCount == players.size()) {
 
-//            GameLogic logic = new GameLogic();
             setCorrectWord(logic);
 
             startGame(players);
@@ -51,19 +52,29 @@ public class Room implements Runnable {
             getPacket(players);
             if (allPlayersReady(players)) {
                 sendCorrectWord(players, logic);
-
+                long startTime = System.currentTimeMillis();
+                long roundTime;
                 while (logic.isRoundActive()) {
+                    roundTime = System.currentTimeMillis();
+//                    if(roundTime - startTime < 100000L) {
                     File board = getBoard(players);
+                    System.out.println(board.toPath());
                     notificationPlayersAboutBoard(players, board);
-                    //notificationPlayerAboutGameResult(players, logic);
+                    logic.setRoundActive(false);
                 }
-
-//            notificationPlayersAboutBoard(players, board);
+                        //notificationPlayerAboutGameResult(players, logic);
+//                    } else {
+                       logic.setRoundActive(false);
+//                       break;
+                System.out.println(getLogic().isRoundActive());
+                notificationPlayerAboutGameResult(players, logic);
+                    }
+                }
+//                System.out.println(logic.isRoundActive());
 //                notificationPlayerAboutGameResult(players, logic);
-//
             }
-        }
-    }
+//        }
+//    }
 
 
     private static void setRoles(List<Player> players) {

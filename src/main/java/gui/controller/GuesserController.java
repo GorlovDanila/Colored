@@ -65,8 +65,8 @@ public class GuesserController {
         String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
         System.out.println(result);
         if(result.equals("Вы угадали")) {
-            //System.out.println(AuthController.client.getName() + " выиграл");
-            Room.logic.setRoundActive(false);
+            System.out.println(AuthController.client.getName() + " выиграл");
+//            Room.logic.setRoundActive(false);
             changeVisibility();
         }
     }
@@ -112,6 +112,7 @@ public class GuesserController {
         Thread thread = new Thread(() -> {
             Runnable updater = () -> {
                 file = (File) AuthController.client.getGameThread().readObject(2);
+//                thread.interrupt();
                 try {
                     Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
                     iv.setImage(image);
@@ -132,29 +133,6 @@ public class GuesserController {
         });
         thread.setDaemon(true);
         thread.start();
-
-//        iv.setOnMouseMoved(mouseEvent -> {
-//            file = (File) AuthController.client.getGameThread().readObject(2);
-//            try {
-//                Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
-//                iv.setImage(image);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
-
-
-//        System.out.println(count);
-//        while (true) {
-           // iv.setImage(new Image((String) AuthController.client.getGameThread().readObject(2)));
-//        }
-//        System.out.println(2);
-//            Thread.sleep(5000);
-//            iv.setImage(new Image((String) AuthController.client.getGameThread().readObject(2)));
-//        System.out.println(3);
-           // iv.setImage(new Image((String) AuthController.client.getGameThread().readObject(2)));
-//        }
-//        changeVisibility();
     }
 
     @FXML
