@@ -56,6 +56,8 @@ public class GuesserController {
 
     File file;
 
+    Thread thread;
+
     public Button newRoundBtn;
     public Label newRoundLabel;
 
@@ -65,6 +67,7 @@ public class GuesserController {
         AuthController.client.getGameThread().writeObject(wordInput.getText(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_JSON, 1);
         String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
         System.out.println(result);
+        thread.interrupt();
         if(result.equals("Вы угадали")) {
             System.out.println(AuthController.client.getName() + " выиграл");
             Room.logic.setRoundActive(false);
@@ -110,7 +113,7 @@ public class GuesserController {
 
 
 
-        Thread thread = new Thread(() -> {
+        thread = new Thread(() -> {
             Runnable updater = () -> {
                 file = (File) AuthController.client.getGameThread().readObject(2);
                 try {
