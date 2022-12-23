@@ -13,10 +13,13 @@ import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import protocols.MessagePacket;
@@ -54,7 +57,7 @@ public class DrawerController {
     @FXML
     public Label newRoundLabel;
     @FXML
-    public GridPane gp;
+    public VBox vbox;
     @FXML
     public ListView<String> listView;
 
@@ -113,15 +116,25 @@ public class DrawerController {
         if (canvas.isVisible()) {
             canvas.setVisible(false);
             bp.getChildren().remove(canvas);
-            gp.setVisible(true);
-            bp.setCenter(gp);
+            vbox.setVisible(true);
+            bp.setCenter(vbox);
+            wordLabel.setVisible(false);
+
+            cp.setVisible(false);
+            slider.setVisible(false);
+            sliderLabel.setVisible(false);
             wordLabel.setVisible(false);
         } else {
-            gp.setVisible(false);
-            bp.getChildren().remove(gp);
+            vbox.setVisible(false);
+            bp.getChildren().remove(vbox);
             canvas.setVisible(true);
             initCanvas();
             bp.setCenter(canvas);
+            wordLabel.setVisible(true);
+
+            cp.setVisible(true);
+            slider.setVisible(true);
+            sliderLabel.setVisible(true);
             wordLabel.setVisible(true);
         }
     }

@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import protocols.MessagePacket;
 
 import javax.imageio.ImageIO;
@@ -45,7 +46,7 @@ public class GuesserController {
     @FXML
     public BorderPane bp;
     @FXML
-    public GridPane gp;
+    public VBox vbox;
     @FXML
     public Label wordLabel;
     @FXML
@@ -80,15 +81,15 @@ public class GuesserController {
         if (iv.isVisible()) {
             iv.setVisible(false);
             bp.getChildren().remove(iv);
-            gp.setVisible(true);
-            bp.setCenter(gp);
+            vbox.setVisible(true);
+            bp.setCenter(vbox);
 
             wordLabel.setVisible(false);
             wordBtn.setVisible(false);
             wordInput.setVisible(false);
         } else {
-            gp.setVisible(false);
-            bp.getChildren().remove(gp);
+            vbox.setVisible(false);
+            bp.getChildren().remove(vbox);
             iv.setVisible(true);
             bp.setCenter(iv);
 

@@ -16,39 +16,46 @@
             id="BorderPane"
             fx:id="bp"
             minWidth="1080"
-            minHeight="600">
-
-    <bottom>
-        <GridPane alignment="TOP_CENTER" hgap="20">
-            <Label text="Угадать слово: " fx:id="wordLabel" visible="false"
-                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-
-            <TextField id="wordInput" fx:id="wordInput" visible="false"
-                       GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-
-            <Button id="wordBtn" text="Ok"
-                    onAction="#wordBtnAction" fx:id="wordBtn" visible="false"
-                    GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-        </GridPane>
-    </bottom>
+            minHeight="600"
+            styleClass="bp-drawer"
+            stylesheets="main.css">
 
     <left>
-        <GridPane alignment="TOP_CENTER" vgap="20">
-            <Label text="Рисует: "
-                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <VBox alignment="TOP_CENTER" spacing="4">
+            <padding>
+                <Insets bottom="0" left="20" right="0" top="70"/>
+            </padding>
+
+            <Label text="Рисует: " styleClass="label-form"/>
 
             <Label text="Nickname" fx:id="drawerLabel"
-                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                   styleClass="label-imp"/>
+
+            <Label/>
+
+            <Label text="Слово:" fx:id="wordLabel"
+                   styleClass="label-form"/>
+
+            <TextField id="wordInput" fx:id="wordInput" visible="false" styleClass="text-field"/>
+
+            <Button id="wordBtn" text="Отгадать"
+                    onAction="#wordBtnAction" fx:id="wordBtn" visible="false" styleClass="btn, btn-sm, btn-success"/>
+
+            <Label/>
 
             <Label text="00:00" fx:id="timerLabel"
-                   GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                   styleClass="label-imp"/>
+
+            <Label/>
+
+            <ListView fx:id="listView" maxHeight="300" prefHeight="150.0" prefWidth="247.0" styleClass="list-view"/>
+
+            <Label/>
 
             <Label text="0000" fx:id="lobbyIdLabel"
-                   GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                   styleClass="label-form"/>
 
-            <ListView fx:id="listView" maxHeight="300" prefHeight="150.0" prefWidth="247.0" GridPane.columnIndex="0"
-                      GridPane.rowIndex="3"/>
-        </GridPane>
+        </VBox>
     </left>
 
     <center>
@@ -57,12 +64,11 @@
                    pickOnBounds="true"
                    preserveRatio="true"
                    visible="false"/>
-        <GridPane fx:id="gp" vgap="8.0" alignment="CENTER">
-            <Label text="Новый раунд" fx:id="newRoundLabel"
-                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <VBox fx:id="vbox" alignment="CENTER" spacing="4">
+            <Label text="Новый раунд" fx:id="newRoundLabel" styleClass="label-form"/>
             <Button text="Начать" fx:id="newRoundBtn" onAction="#roundBtnAction"
-                    GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        </GridPane>
+                    styleClass="btn, btn-sm, btn-success"/>
+        </VBox>
     </center>
 
 </BorderPane>
