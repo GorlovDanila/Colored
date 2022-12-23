@@ -159,7 +159,15 @@ public class DrawerController {
         canvas.setOnMouseDragged(e -> {
             gc.lineTo(e.getX(), e.getY());
             gc.stroke();
-            AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
+            String subtype = AuthController.client.getGameThread().readPacket();
+            if (subtype.equals("SUBTYPE_END_ROUND")) {
+                Gson gson = new Gson();
+                String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+                System.out.println(result + "выиграл");
+                changeVisibility();
+            } else {
+                AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
+            }
 //            Gson gson = new Gson();
 //            String result;
 //            try {
@@ -226,13 +234,17 @@ public class DrawerController {
         Gson gson = new Gson();
         String result = null;
 //        try {
-           // result = Room.getTimeLimiter().callWithTimeout(() -> gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class), Room.getTimeout());
-          //  result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+        // result = Room.getTimeLimiter().callWithTimeout(() -> gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class), Room.getTimeout());
+        System.out.println(Room.getCount());
+//        if(Room.getCount() >= 100) {
+        //  result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+//        }
 //        } catch (TimeoutException | InterruptedException | ExecutionException ex) {
 //            ex.printStackTrace();
 //        }
         if (result != null) {
             System.out.println(result + "выиграл");
+
         }
     }
 

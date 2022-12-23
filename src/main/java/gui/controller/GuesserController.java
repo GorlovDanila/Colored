@@ -65,15 +65,22 @@ public class GuesserController {
     public void wordBtnAction(ActionEvent actionEvent) {
         Gson gson = new Gson();
         AuthController.client.getGameThread().writeObject(wordInput.getText(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_JSON, 1);
-        String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
-        System.out.println(result);
-        thread.interrupt();
-        if(result.equals("Вы угадали")) {
-            System.out.println(AuthController.client.getName() + " выиграл");
-            Room.logic.setRoundActive(false);
-            changeVisibility();
+        //AuthController.client.getGameThread().readObject(2);
+//        while (true) {
+            String subtype = AuthController.client.getGameThread().readPacket();
+            if (subtype.equals("SUBTYPE_END_ROUND")) {
+                String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+                System.out.println(result);
+//            thread.interrupt();
+//            thread.interrupt();
+                if (result.equals("Вы угадали")) {
+                    System.out.println(AuthController.client.getName() + " выиграл");
+//            Room.logic.setRoundActive(false);
+                    changeVisibility();
+                }
+            }
         }
-    }
+//    }
 
 
     //берём файл с сервера, сетим картинку по пути, берём ответ игрока, отправляем на сервер(комнату), там проверяем на правильность,
@@ -115,6 +122,7 @@ public class GuesserController {
 
         thread = new Thread(() -> {
             Runnable updater = () -> {
+
                 file = (File) AuthController.client.getGameThread().readObject(2);
                 try {
                     Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
@@ -124,11 +132,14 @@ public class GuesserController {
                 }
             };
 
-            while (true) {
+            while (!thread.isInterrupted()) {
+//                if (thread.isAlive()) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);
+//                    break;
+                    //Thread.currentThread().interrupt();
                 }
 
                 Platform.runLater(updater);

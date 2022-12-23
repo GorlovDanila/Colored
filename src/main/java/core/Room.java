@@ -26,6 +26,8 @@ public class Room implements Runnable {
     private static TimeLimiter timeLimiter = SimpleTimeLimiter.create(Executors.newSingleThreadExecutor());
     private static Duration timeout = Duration.ofMillis(10000);
 
+    private static int count = 0;
+
 //    public static boolean isGameActive = false;
 
     public List<Player> getPlayers() {
@@ -58,6 +60,10 @@ public class Room implements Runnable {
         return id;
     }
 
+    public static int getCount() {
+        return count;
+    }
+
     @Override
     public void run() {
 //ЛЮДИ ОБЩАЮТСЯ ЧЕРЕЗ СЕРВАК
@@ -66,27 +72,44 @@ public class Room implements Runnable {
 //        if (playersCount == players.size()) {
 
 //            GameLogic logic = new GameLogic();
-            setCorrectWord(logic);
+        setCorrectWord(logic);
 
-            startGame(players);
+        startGame(players);
 
-            sendPacket(players, MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_GAME);
+        sendPacket(players, MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_GAME);
 
-            setRoles(players);
+        setRoles(players);
 
-            notificationPlayersAboutRoles(players, logic);
-            getPacket(players);
-            if (allPlayersReady(players)) {
-                sendCorrectWord(players, logic);
-                while (logic.isRoundActive()) {
-                    File board = getBoard(players);
-                    notificationPlayersAboutBoard(players, board);
-                    }
-                    //notificationPlayerAboutGameResult(players, logic);
-               }
-          }
-
-
+        notificationPlayersAboutRoles(players, logic);
+        getPacket(players);
+        if (allPlayersReady(players)) {
+            sendCorrectWord(players, logic);
+//            while (logic.isRoundActive()) {
+//                count++;
+//                System.out.println(count);
+//                if (count < 1000) {
+//                    File board = getBoard(players);
+//                    notificationPlayersAboutBoard(players, board);
+////                    notificationPlayerAboutGameResult(players, logic);
+//                } else {
+//                    System.out.println("Время вышло");
+//                    notificationPlayerAboutGameResult(players, logic);
+//                }
+//            }
+            while (count < 100) {
+                count++;
+                System.out.println(count);
+//                if (count < 1000) {
+                sendDrawerPacket(players, MessagePacket.TYPE_META, MessagePacket.TYPE_MESSAGE);
+                File board = getBoard(players);
+                notificationPlayersAboutBoard(players, board);
+            }
+//                    notificationPlayerAboutGameResult(players, logic);
+//                } else {
+            System.out.println("Время вышло");
+            notificationPlayerAboutGameResult(players, logic);
+        }
+    }
 
     private static void setRoles(List<Player> players) {
         int idOfDrawer = -1;
@@ -107,7 +130,7 @@ public class Room implements Runnable {
         if (idOfDrawer + 1 < players.size() && idOfDrawer != -1) {
             players.get(idOfDrawer + 1).setRole("Drawer");
             for (int i = 0; i < players.size(); i++) {
-                if(i != idOfDrawer + 1) {
+                if (i != idOfDrawer + 1) {
                     players.get(i).setRole("Guesser");
                 }
             }
@@ -161,11 +184,14 @@ public class Room implements Runnable {
                     String word = gson.fromJson((String) player.readObject(1), String.class);
                     System.out.println(word);
                     assert word != null;
+
                     if (gameLogic.equalsWords(word)) {
+                        player.writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_END_ROUND);
                         player.writeObject("Вы угадали", 4, 5, 2);
                         nickGuessed = player.getName();
                         break;
                     } else {
+                        player.writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_END_ROUND);
                         player.writeObject("Вы не угадали", 4, 5, 2);
                     }
                 }
@@ -174,6 +200,7 @@ public class Room implements Runnable {
 
         for (Player player : players) {
             if (player.getRole().equals("Drawer")) {
+                player.writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_END_ROUND);
                 player.writeObject(nickGuessed + " угадал", 4, 5, 2);
             }
         }
@@ -244,5 +271,13 @@ public class Room implements Runnable {
             }
         }
         return flag;
+    }
+
+    private static void sendDrawerPacket(List<Player> players, int type, int subtype) {
+        for (Player player : players) {
+            if(player.getRole().equals("Drawer")) {
+                player.writeMessage(type, subtype);
+            }
+        }
     }
 }
