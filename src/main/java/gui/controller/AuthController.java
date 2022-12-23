@@ -29,7 +29,9 @@ public class AuthController {
             Stage stage = (Stage) joinLobbyInput.getScene().getWindow();
             client = new PlayerClient("127.0.0.1");
             client.setName(nameInput.getText());
-            client.setIdOfRoom(joinLobbyInput.getText());
+            client.setIdOfRoom(Integer.parseInt(joinLobbyInput.getText()));
+            client.setLobbyCreatorFlag(false);
+            client.setCountPlayers(-1);
 //            client.start();
             try {
                 WaitingJoinerScene.display(stage);
@@ -46,8 +48,9 @@ public class AuthController {
             Server.names.add(nameInput.getText());
             client = new PlayerClient("127.0.0.1");
             client.setName(nameInput.getText());
-            client.setIdOfRoom(newLobbyInput.getText());
+            client.setIdOfRoom(Integer.parseInt(newLobbyInput.getText()));
             client.setLobbyCreatorFlag(true);
+            client.setCountPlayers(Integer.parseInt(membersInput.getText()));
 //            client.start();
             try {
                 WaitingCreatorScene.display(stage);

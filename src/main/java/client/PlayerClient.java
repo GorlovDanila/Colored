@@ -18,8 +18,21 @@ public class PlayerClient {
 
     private boolean lobbyCreatorFlag = false;
 
-    private String idOfRoom;
+    private int idOfRoom;
 
+    private int countPlayers;
+
+    public boolean isLobbyCreatorFlag() {
+        return lobbyCreatorFlag;
+    }
+
+    public int getCountPlayers() {
+        return countPlayers;
+    }
+
+    public void setCountPlayers(int countPlayers) {
+        this.countPlayers = countPlayers;
+    }
 //    public boolean isLobbyCreatorFlag() {
 //        return lobbyCreatorFlag;
 //    }
@@ -28,11 +41,11 @@ public class PlayerClient {
         this.lobbyCreatorFlag = lobbyCreatorFlag;
     }
 
-    public String getIdOfRoom() {
+    public int getIdOfRoom() {
         return idOfRoom;
     }
 
-    public void setIdOfRoom(String idOfRoom) {
+    public void setIdOfRoom(int idOfRoom) {
         this.idOfRoom = idOfRoom;
     }
 
