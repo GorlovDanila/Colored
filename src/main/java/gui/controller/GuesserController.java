@@ -66,7 +66,7 @@ public class GuesserController {
         String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
         System.out.println(result);
         if(result.equals("Вы угадали")) {
-            //System.out.println(AuthController.client.getName() + " выиграл");
+            System.out.println(AuthController.client.getName() + " выиграл");
             Room.logic.setRoundActive(false);
             changeVisibility();
         }

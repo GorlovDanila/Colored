@@ -13,6 +13,25 @@ public class Player {
     private String role;
     private String name;
 
+    private boolean lobbyCreatorFlag = false;
+
+    private int countPlayers;
+
+    public int getCountPlayers() {
+        return countPlayers;
+    }
+
+    public void setCountPlayers(int countPlayers) {
+        this.countPlayers = countPlayers;
+    }
+
+    public boolean isLobbyCreatorFlag() {
+        return lobbyCreatorFlag;
+    }
+
+    public void setLobbyCreatorFlag(boolean lobbyCreatorFlag) {
+        this.lobbyCreatorFlag = lobbyCreatorFlag;
+    }
 //    public boolean isGetBoardFlag() {
 //        return getBoardFlag;
 //    }
@@ -22,13 +41,13 @@ public class Player {
     }
 
     private boolean getBoardFlag = false;
-    private String idOfRoom;
+    private int idOfRoom;
 
-    public String getIdOfRoom() {
+    public int getIdOfRoom() {
         return idOfRoom;
     }
 
-    public void setIdOfRoom(String idOfRoom) {
+    public void setIdOfRoom(int idOfRoom) {
         this.idOfRoom = idOfRoom;
     }
 
@@ -67,7 +86,6 @@ public class Player {
         this.writer = createWriter();
         role = "";
         name = "";
-        idOfRoom = "";
     }
 
     private InputStream createReader() throws IOException {

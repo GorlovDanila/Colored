@@ -42,6 +42,10 @@ public class WaitingJoinerController {
         AuthController.client.start();
         AuthController.client.getGameThread().writeObject(AuthController.client.getName(), 4, 5, 1);
         AuthController.client.getGameThread().writeObject(AuthController.client.getIdOfRoom(), 4, 5, 2);
+
+        AuthController.client.getGameThread().writeObject(AuthController.client.getCountPlayers(), 4, 5, 3);
+        AuthController.client.getGameThread().writeObject(AuthController.client.isLobbyCreatorFlag(), 4, 5, 4);
+
         AuthController.client.getGameThread().writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_GAME);
 
         while (AuthController.client.getRole() == null) {

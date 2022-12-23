@@ -1,6 +1,7 @@
 package gui.controller;
 
 import com.google.gson.Gson;
+import core.Room;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -31,6 +32,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 
 public class DrawerController {
@@ -157,6 +160,16 @@ public class DrawerController {
             gc.lineTo(e.getX(), e.getY());
             gc.stroke();
             AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
+//            Gson gson = new Gson();
+//            String result;
+//            try {
+//                result = Room.getTimeLimiter().callWithTimeout(() -> gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class), Room.getTimeout());
+//            } catch (TimeoutException | InterruptedException | ExecutionException ex) {
+//                throw new RuntimeException(ex);
+//            }
+//            if (result != null) {
+//                System.out.println(result + "выиграл");
+//            }
         });
     }
 
@@ -209,8 +222,19 @@ public class DrawerController {
         changeVisibility();
 
         AuthController.client.getGameThread().writeObject(onSave(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 5);
-    }
 
+        Gson gson = new Gson();
+        String result = null;
+//        try {
+           // result = Room.getTimeLimiter().callWithTimeout(() -> gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class), Room.getTimeout());
+          //  result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+//        } catch (TimeoutException | InterruptedException | ExecutionException ex) {
+//            ex.printStackTrace();
+//        }
+        if (result != null) {
+            System.out.println(result + "выиграл");
+        }
+    }
 
 
     public File onSave() {
