@@ -7,7 +7,8 @@
 <?import javafx.scene.paint.*?>
 
 <BorderPane id="BorderPane" fx:id="bp" minHeight="600" minWidth="1080" xmlns="http://javafx.com/javafx/17.0.2-ea"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.DrawerController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.DrawerController" stylesheets="main.css"
+            styleClass="bp-drawer">
 
     <top>
         <GridPane alignment="TOP_CENTER" hgap="20">
@@ -16,61 +17,64 @@
                 <Insets bottom="0" left="0" right="0" top="20"/>
             </padding>
 
-            <ColorPicker fx:id="cp" onAction="#cpAction" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <ColorPicker fx:id="cp" visible="false" onAction="#cpAction" GridPane.columnIndex="0" GridPane.rowIndex="0">
                 <value>
                     <Color red="0.0" green="0.0" blue="0.0"/>
                 </value>
             </ColorPicker>
 
-            <Slider fx:id="slider" max="100.0" min="1.0" showTickLabels="true" showTickMarks="true"
+            <Slider fx:id="slider" visible="false" max="100.0" min="1.0" showTickLabels="true" showTickMarks="true"
                     GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-            <Label fx:id="sliderLabel" text="1.0" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-            <columnConstraints>
-                <ColumnConstraints/>
-                <ColumnConstraints/>
-                <ColumnConstraints/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints/>
-            </rowConstraints>
-
+            <Label fx:id="sliderLabel" text="1.0" GridPane.columnIndex="2" GridPane.rowIndex="0" visible="false"
+                   styleClass="label-form"/>
         </GridPane>
     </top>
 
-    <bottom>
-        <Label fx:id="wordLabel" text="Слово" BorderPane.alignment="TOP_CENTER"/>
-    </bottom>
-
     <left>
-        <GridPane alignment="TOP_CENTER" vgap="20">
-            <Label text="Рисует: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <VBox alignment="TOP_CENTER" spacing="4">
+            <padding>
+                <Insets bottom="0" left="20" right="0" top="70"/>
+            </padding>
 
-            <Label fx:id="drawerLabel" text="Nickname" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            <Label text="Рисует:" styleClass="label-form"/>
 
-            <Label fx:id="timerLabel" text="00:00" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Label fx:id="drawerLabel" text="Nickname"
+                   styleClass="label-imp"/>
 
-            <Label fx:id="lobbyIdLabel" text="0000" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <Label/>
 
-            <ListView fx:id="listView" maxHeight="300" prefHeight="150.0" prefWidth="247.0" GridPane.columnIndex="0"
-                      GridPane.rowIndex="3"/>
-        </GridPane>
+            <Label text="Слово:"
+                   styleClass="label-form"/>
+
+            <Label fx:id="wordLabel" visible="false" text="?"
+                   styleClass="label-imp"/>
+
+            <Label/>
+
+            <Label fx:id="timerLabel" text="00:00"
+                   styleClass="label-imp"/>
+
+            <Label/>
+
+            <ListView fx:id="listView" maxHeight="300" prefHeight="150.0" prefWidth="247.0" styleClass="list-view"/>
+
+            <Label/>
+
+            <Label fx:id="lobbyIdLabel" text="0000"
+                   styleClass="label-form"/>
+
+        </VBox>
     </left>
 
     <center>
         <Canvas fx:id="canvas" height="480.0" visible="false" width="720.0"/>
-        <GridPane fx:id="gp" alignment="CENTER" vgap="8.0">
-            <Label fx:id="newRoundLabel" text="Новый раунд" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-            <Button fx:id="newRoundBtn" onAction="#roundBtnAction" text="Начать" GridPane.columnIndex="0"
-                    GridPane.rowIndex="1"/>
-            <columnConstraints>
-                <ColumnConstraints/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints/>
-                <RowConstraints/>
-            </rowConstraints>
-        </GridPane>
+        <VBox fx:id="vbox" alignment="CENTER" spacing="4">
+            <Label fx:id="newRoundLabel" text="Новый раунд"
+                   styleClass="label-form"/>
+            <Button fx:id="newRoundBtn" onAction="#roundBtnAction" text="Начать"
+                    GridPane.rowIndex="1" styleClass="btn, btn-sm, btn-success"/>
+        </VBox>
     </center>
 
 </BorderPane>

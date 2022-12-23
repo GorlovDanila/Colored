@@ -15,41 +15,42 @@
           vgap="10"
           minWidth="1080"
           minHeight="600"
+          styleClass="gp-auth"
           stylesheets="main.css">
 
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
 
-    <Label text="Введите никнейм: " styleClass="text-info, label-form"
+    <Label text="Введите никнейм: " styleClass="label-form"
            GridPane.columnIndex="0" GridPane.rowIndex="0"/>
 
     <TextField id="nameInput" fx:id="nameInput" styleClass="text-field"
                GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-    <Label text="Создать лобби: " styleClass="text-info"
+    <Label text="Создать лобби: " styleClass="label-form"
            GridPane.columnIndex="0" GridPane.rowIndex="3"/>
 
     <TextField id="newLobbyInput" fx:id="newLobbyInput" styleClass="text-field"
                GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-    <Label text="Количество игроков: " styleClass="text-info"
+    <Label text="Количество игроков: " styleClass="label-form"
            GridPane.columnIndex="0" GridPane.rowIndex="4"/>
 
     <TextField id="nameInput" fx:id="membersInput" styleClass="text-field"
                GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-    <Button id="newLobbyBtn" text="Ok" styleClass="btn, btn-sm, btn-primary"
+    <Button id="newLobbyBtn" text="ОК" styleClass="btn, btn-sm, btn-success"
             onAction="#newLobbyAction" fx:id="newLobbyBtn"
             GridPane.columnIndex="2" GridPane.rowIndex="4"/>
 
-    <Label text="Присоединиться к лобби: " styleClass="text-info"
+    <Label text="Присоединиться к лобби: " styleClass="label-form"
            GridPane.columnIndex="0" GridPane.rowIndex="7"/>
 
     <TextField id="joinLobbyInput" fx:id="joinLobbyInput" styleClass="text-field"
                GridPane.columnIndex="1" GridPane.rowIndex="7"/>
 
-    <Button id="joinLobbyBtn" text="Ok" styleClass="btn, btn-sm, btn-primary"
+    <Button id="joinLobbyBtn" text="ОК" styleClass="btn, btn-sm, btn-success"
             onAction="#joinLobbyAction" fx:id="joinLobbyBtn"
             GridPane.columnIndex="2" GridPane.rowIndex="7"/>
 
