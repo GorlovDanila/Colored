@@ -85,7 +85,7 @@ public class Room implements Runnable {
                     //notificationPlayerAboutGameResult(players, logic);
                }
           }
-    }
+
 
 
     private static void setRoles(List<Player> players) {
