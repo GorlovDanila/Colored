@@ -1,7 +1,5 @@
 package gui.controller;
 
-import core.Player;
-import core.Room;
 import gui.scene.DrawerScene;
 import gui.scene.GuesserScene;
 import javafx.event.ActionEvent;
@@ -10,14 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import protocols.MessagePacket;
-import server.Server;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-
-import static javafx.application.Application.STYLESHEET_CASPIAN;
-import static javafx.application.Application.setUserAgentStylesheet;
 
 public class WaitingJoinerController {
     @FXML
@@ -28,11 +20,6 @@ public class WaitingJoinerController {
     public Label lobbyId;
     @FXML
     public Button startBtn;
-
-    public static CountDownLatch latch = new CountDownLatch(1);
-
-    public static boolean pauseFlag = true;
-    public boolean stopFlag = false;
 
     @FXML
     public void startAction(ActionEvent actionEvent) throws IOException, InterruptedException {
@@ -56,8 +43,6 @@ public class WaitingJoinerController {
         System.out.println(packet);
         if (packet.equals("SUBTYPE_START_ROUND")) {
             if (AuthController.client.getRole().equals("Drawer")) {
-//                    //клиент отправляет сообщение на сервер с типом старт
-//                    //сюда приходит ответ от сервака,
                 DrawerScene.display(stage);
             } else {
                 GuesserScene.display(stage);
@@ -65,4 +50,4 @@ public class WaitingJoinerController {
         }
     }
 }
-//}
+

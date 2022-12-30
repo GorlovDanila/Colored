@@ -24,7 +24,7 @@ public class AuthController {
     public TextField membersInput;
 
     @FXML
-    public void joinLobbyAction(ActionEvent actionEvent) throws IOException {
+    public void joinLobbyAction(ActionEvent actionEvent) {
         if (isInt(joinLobbyInput)) {
             Stage stage = (Stage) joinLobbyInput.getScene().getWindow();
             client = new PlayerClient("127.0.0.1");
@@ -32,7 +32,6 @@ public class AuthController {
             client.setIdOfRoom(Integer.parseInt(joinLobbyInput.getText()));
             client.setLobbyCreatorFlag(false);
             client.setCountPlayers(-1);
-//            client.start();
             try {
                 WaitingJoinerScene.display(stage);
             } catch (IOException e) {
@@ -42,7 +41,7 @@ public class AuthController {
     }
 
     @FXML
-    public void newLobbyAction(ActionEvent actionEvent) throws IOException {
+    public void newLobbyAction(ActionEvent actionEvent) {
         if (isInt(newLobbyInput)) {
             Stage stage = (Stage) newLobbyInput.getScene().getWindow();
             Server.names.add(nameInput.getText());
@@ -51,7 +50,6 @@ public class AuthController {
             client.setIdOfRoom(Integer.parseInt(newLobbyInput.getText()));
             client.setLobbyCreatorFlag(true);
             client.setCountPlayers(Integer.parseInt(membersInput.getText()));
-//            client.start();
             try {
                 WaitingCreatorScene.display(stage);
             } catch (IOException e) {

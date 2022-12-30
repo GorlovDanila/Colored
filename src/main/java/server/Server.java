@@ -36,14 +36,6 @@ public class Server {
         }
     }
 
-    public static boolean isFlagExist() {
-        return flagExist;
-    }
-
-    public static boolean isFlagNotExist() {
-        return flagNotExist;
-    }
-
     private static void checkingRoomExist(Player player) {
         boolean roomExist = false;
         int roomPosition = -1;

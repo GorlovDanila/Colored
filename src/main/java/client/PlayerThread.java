@@ -9,29 +9,11 @@ public class PlayerThread implements Runnable {
     private final OutputStream writer;
     private final PlayerClient client;
 
-//    public boolean isGetBoardFlag() {
-//        return getBoardFlag;
-//    }
-
-//    public void setGetBoardFlag(boolean getBoardFlag) {
-//       this.getBoardFlag = getBoardFlag;
-//    }
-
-//    public boolean getBoardFlag = false;
-
     public PlayerThread(InputStream reader, OutputStream writer, PlayerClient client) {
         this.reader = reader;
         this.writer = writer;
         this.client = client;
     }
-
-//    public InputStream getInput() {
-//        return reader;
-//    }
-
-//    public OutputStream getOutput() {
-//        return writer;
-//    }
 
     public Object readObject(int id) {
         try {
@@ -43,7 +25,7 @@ public class PlayerThread implements Runnable {
         }
     }
 
-    private byte[] extendArray(byte[] oldArray) {
+    public static byte[] extendArray(byte[] oldArray) {
         int oldSize = oldArray.length;
         byte[] newArray = new byte[oldSize * 2];
         System.arraycopy(oldArray, 0, newArray, 0, oldSize);
@@ -61,7 +43,7 @@ public class PlayerThread implements Runnable {
         }
     }
 
-    private byte[] readInput(InputStream stream) throws IOException {
+    public static byte[] readInput(InputStream stream) throws IOException {
         int b;
         byte[] buffer = new byte[10];
         int counter = 0;

@@ -1,41 +1,29 @@
 package core;
 
-import com.google.common.util.concurrent.SimpleTimeLimiter;
-import com.google.common.util.concurrent.TimeLimiter;
 import com.google.gson.Gson;
 import protocols.MessagePacket;
 
 import java.io.File;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeoutException;
 
 public class Room implements Runnable {
     private final int id;
-    private List<Player> players = new ArrayList<>();
+    private static List<Player> players = new ArrayList<>();
 
     public static GameLogic logic = new GameLogic();
-    private int playersCount;
+    private final int playersCount;
 
     public static boolean getBoardFlag = false;
 
-    private static TimeLimiter timeLimiter = SimpleTimeLimiter.create(Executors.newSingleThreadExecutor());
-    private static Duration timeout = Duration.ofMillis(10000);
-
     private static int count = 0;
 
-//    public static boolean isGameActive = false;
-
-    public List<Player> getPlayers() {
+    public static List<Player> getPlayers() {
         return players;
     }
 
     public void setPlayers(List<Player> players) {
-        this.players = players;
+        Room.players = players;
     }
 
     public int getPlayersCount() {
@@ -44,16 +32,7 @@ public class Room implements Runnable {
 
     public Room(int id, int playersCount) {
         this.id = id;
-//        this.players = players;
         this.playersCount = playersCount;
-    }
-
-    public static Duration getTimeout() {
-        return timeout;
-    }
-
-    public static TimeLimiter getTimeLimiter() {
-        return timeLimiter;
     }
 
     public int getId() {
@@ -80,32 +59,17 @@ public class Room implements Runnable {
 
         setRoles(players);
 
-        notificationPlayersAboutRoles(players, logic);
+        notificationPlayersAboutRoles(players);
         getPacket(players);
         if (allPlayersReady(players)) {
             sendCorrectWord(players, logic);
-//            while (logic.isRoundActive()) {
-//                count++;
-//                System.out.println(count);
-//                if (count < 1000) {
-//                    File board = getBoard(players);
-//                    notificationPlayersAboutBoard(players, board);
-////                    notificationPlayerAboutGameResult(players, logic);
-//                } else {
-//                    System.out.println("Время вышло");
-//                    notificationPlayerAboutGameResult(players, logic);
-//                }
-//            }
             while (count < 100) {
                 count++;
                 System.out.println(count);
-//                if (count < 1000) {
                 sendDrawerPacket(players, MessagePacket.TYPE_META, MessagePacket.TYPE_MESSAGE);
                 File board = getBoard(players);
                 notificationPlayersAboutBoard(players, board);
             }
-//                    notificationPlayerAboutGameResult(players, logic);
-//                } else {
             System.out.println("Время вышло");
             notificationPlayerAboutGameResult(players, logic);
         }
@@ -142,7 +106,7 @@ public class Room implements Runnable {
         }
     }
 
-    private static void notificationPlayersAboutRoles(List<Player> players, GameLogic gameLogic) {
+    private static void notificationPlayersAboutRoles(List<Player> players) {
         for (Player player : players) {
             if (player.getRole().equals("Drawer")) {
                 player.writeObject("Вы рисующий", MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_DEFAULT, 2);
@@ -175,7 +139,6 @@ public class Room implements Runnable {
 
     private static void notificationPlayerAboutGameResult(List<Player> players, GameLogic gameLogic) {
         String nickGuessed = null;
-        String idOfDrawer = null;
         Gson gson = new Gson();
         while (nickGuessed == null) {
             for (Player player : players) {
@@ -243,14 +206,10 @@ public class Room implements Runnable {
 
     private static void getPacket(List<Player> players) {
         boolean startRoundFlag = true;
-        boolean getBoard = false;
         for (Player player : players) {
             String subtype = player.readPacket();
             if (!subtype.equals("SUBTYPE_START_ROUND")) {
                 startRoundFlag = false;
-            }
-            if (subtype.equals("SUBTYPE_JSON")) {
-                getBoard = true;
             }
         }
         if (startRoundFlag) {
@@ -258,9 +217,6 @@ public class Room implements Runnable {
                 player.writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
             }
         }
-//        if(getBoard) {
-//
-//        }
     }
 
     public static boolean allPlayersReady(List<Player> players) {

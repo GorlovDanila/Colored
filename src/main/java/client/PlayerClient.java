@@ -8,7 +8,7 @@ import java.net.Socket;
 public class PlayerClient {
 
     private Socket clientSocket;
-    private String serverIp;
+    private final String serverIp;
     private InputStream reader;
     private OutputStream writer;
 
@@ -33,9 +33,6 @@ public class PlayerClient {
     public void setCountPlayers(int countPlayers) {
         this.countPlayers = countPlayers;
     }
-//    public boolean isLobbyCreatorFlag() {
-//        return lobbyCreatorFlag;
-//    }
 
     public void setLobbyCreatorFlag(boolean lobbyCreatorFlag) {
         this.lobbyCreatorFlag = lobbyCreatorFlag;
@@ -56,10 +53,6 @@ public class PlayerClient {
     public PlayerThread getGameThread() {
         return gameThread;
     }
-
-//    public void setGameThread(PlayerThread gameThread) {
-//        this.gameThread = gameThread;
-//    }
 
     public void start() throws IOException {
         clientSocket = new Socket(serverIp, 8000);
@@ -103,75 +96,4 @@ public class PlayerClient {
             throw new RuntimeException(e);
         }
     }
-
-//    public void writeMessage(int type, int subtype) {
-//        try {
-//            MessagePacket packet = MessagePacket.create((byte) type, (byte) subtype);
-//            writer.write(packet.toByteArray());
-//            writer.flush();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-//    public String readPacket() {
-//        try {
-//            String result = "";
-//            MessagePacket packet = MessagePacket.parse(readInput(reader));
-//            assert packet != null;
-//            switch (packet.getPacketSubtype()) {
-//                case MessagePacket.SUBTYPE_START_GAME -> result = "SUBTYPE_START_GAME";
-//                case MessagePacket.SUBTYPE_END_GAME -> result = "SUBTYPE_END_GAME";
-//                case MessagePacket.SUBTYPE_START_ROUND -> result = "SUBTYPE_START_ROUND";
-//                case MessagePacket.SUBTYPE_END_ROUND -> result = "SUBTYPE_END_ROUND";
-//                case MessagePacket.SUBTYPE_NEXT_ROUND -> result = "SUBTYPE_NEXT_ROUND";
-//                case MessagePacket.SUBTYPE_CORRECT_WORD -> result = "SUBTYPE_CORRECT_WORD";
-//                case MessagePacket.SUBTYPE_JSON -> result = "SUBTYPE_JSON";
-//            }
-//            return result;
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-//    private byte[] extendArray(byte[] oldArray) {
-//        int oldSize = oldArray.length;
-//        byte[] newArray = new byte[oldSize * 2];
-//        System.arraycopy(oldArray, 0, newArray, 0, oldSize);
-//        return newArray;
-//    }
-
-//    private byte[] readInput(InputStream stream) throws IOException {
-//        int b;
-//        byte[] buffer = new byte[10];
-//        int counter = 0;
-//        while ((b = stream.read()) > -1) {
-//            buffer[counter++] = (byte) b;
-//            if (counter >= buffer.length) {
-//                buffer = extendArray(buffer);
-//            }
-//            if (counter > 1 && MessagePacket.compareEOP(buffer, counter - 1)) {
-//                break;
-//            }
-//        }
-//        byte[] data = new byte[counter];
-//        System.arraycopy(buffer, 0, data, 0, counter);
-//        return data;
-//    }
-
-//    public Object readObject(int id) {
-//        try {
-//            MessagePacket packet = MessagePacket.parse(readInput(reader));
-//            assert packet != null;
-//            return packet.getValue(id);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-//    public void close() throws IOException {
-//        writer.close();
-//        reader.close();
-//        clientSocket.close();
-//    }
 }
