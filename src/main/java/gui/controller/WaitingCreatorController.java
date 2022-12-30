@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import protocols.MessagePacket;
 
 import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
 
 public class WaitingCreatorController {
     @FXML
@@ -23,8 +22,6 @@ public class WaitingCreatorController {
     public Button startBtn;
 
     public static boolean nextSceneFlag = false;
-
-    public static CountDownLatch latch = new CountDownLatch(1);
 
     @FXML
     public void startAction(ActionEvent actionEvent) throws IOException, InterruptedException {
@@ -52,7 +49,6 @@ public class WaitingCreatorController {
             } else {
                 GuesserScene.display(stage);
                 nextSceneFlag = true;
-
             }
         }
     }

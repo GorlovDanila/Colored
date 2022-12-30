@@ -1,16 +1,10 @@
 package gui.controller;
 
 import com.google.gson.Gson;
-import core.Room;
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -18,17 +12,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import protocols.MessagePacket;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.Buffer;
 
 public class GuesserController {
     @FXML
@@ -56,6 +45,8 @@ public class GuesserController {
 
     File file;
 
+    Thread thread;
+
     public Button newRoundBtn;
     public Label newRoundLabel;
 
@@ -63,19 +54,16 @@ public class GuesserController {
     public void wordBtnAction(ActionEvent actionEvent) {
         Gson gson = new Gson();
         AuthController.client.getGameThread().writeObject(wordInput.getText(), MessagePacket.TYPE_BOARD, MessagePacket.SUBTYPE_JSON, 1);
-        String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
-        System.out.println(result);
-        if(result.equals("Вы угадали")) {
-            System.out.println(AuthController.client.getName() + " выиграл");
-            Room.logic.setRoundActive(false);
-            changeVisibility();
+        String subtype = AuthController.client.getGameThread().readPacket();
+        if (subtype.equals("SUBTYPE_END_ROUND")) {
+            String result = gson.fromJson((String) AuthController.client.getGameThread().readObject(2), String.class);
+            System.out.println(result);
+            if (result.equals("Вы угадали")) {
+                System.out.println(AuthController.client.getName() + " выиграл");
+                changeVisibility();
+            }
         }
     }
-
-
-    //берём файл с сервера, сетим картинку по пути, берём ответ игрока, отправляем на сервер(комнату), там проверяем на правильность,
-    // если правильно, прекращаем принимать ответы, отправляем всем игрокам в поток результат, завершаем раунд, начинаем новый
-    // если не правильно, продолжаем принимать ответы
 
     public void changeVisibility() {
         if (iv.isVisible()) {
@@ -100,18 +88,16 @@ public class GuesserController {
     }
 
     @FXML
-    public void roundBtnAction(ActionEvent actionEvent) throws InterruptedException, IOException {
-//        changeVisibility();
+    public void roundBtnAction(ActionEvent actionEvent) throws IOException {
         AuthController.client.getGameThread().writeMessage(MessagePacket.TYPE_META, MessagePacket.SUBTYPE_START_ROUND);
         changeVisibility();
         file = (File) AuthController.client.getGameThread().readObject(2);
 
         iv.setImage(SwingFXUtils.toFXImage(ImageIO.read(file), null));
 
-
-
-        Thread thread = new Thread(() -> {
+        thread = new Thread(() -> {
             Runnable updater = () -> {
+
                 file = (File) AuthController.client.getGameThread().readObject(2);
                 try {
                     Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
@@ -121,7 +107,7 @@ public class GuesserController {
                 }
             };
 
-            while (true) {
+            while (!thread.isInterrupted()) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
@@ -133,33 +119,10 @@ public class GuesserController {
         });
         thread.setDaemon(true);
         thread.start();
-
-//        iv.setOnMouseMoved(mouseEvent -> {
-//            file = (File) AuthController.client.getGameThread().readObject(2);
-//            try {
-//                Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
-//                iv.setImage(image);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
-
-
-//        System.out.println(count);
-//        while (true) {
-           // iv.setImage(new Image((String) AuthController.client.getGameThread().readObject(2)));
-//        }
-//        System.out.println(2);
-//            Thread.sleep(5000);
-//            iv.setImage(new Image((String) AuthController.client.getGameThread().readObject(2)));
-//        System.out.println(3);
-           // iv.setImage(new Image((String) AuthController.client.getGameThread().readObject(2)));
-//        }
-//        changeVisibility();
     }
 
     @FXML
-    public void initialize() throws IOException, InterruptedException {
+    public void initialize() {
         listView.getItems().addAll(players);
         iv.setImage(new Image("/test.png"));
         bp.getChildren().remove(iv);
